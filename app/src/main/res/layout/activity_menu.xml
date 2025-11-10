@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#FFFDF7">
+
+    <TextView
+        android:id="@+id/menuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="메뉴 슬롯 대기 중..."
+        android:textSize="28sp"
+        android:textColor="#333333"
+        android:visibility="gone"
+        android:padding="16dp" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="슬롯 돌리기 🎰"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#FFC107" />
+
+</LinearLayout>

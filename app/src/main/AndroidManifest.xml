@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.temidummyapp">
+
+    <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- 저장소 권한 (Android 9 이하에서 사진 저장 시 필요) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TemiDummyApp"
+        tools:targetApi="31">
+
+        <!-- ✅ 앱의 시작 Activity 등록 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ✅ 사진 찍기 관련 Activity 등록 -->
+        <activity
+            android:name=".PhotoTemi"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        
+        <activity
+            android:name=".PhotoTemiFilmingActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        
+        <activity
+            android:name=".PhotoTemiPictureSelectActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
+        <!-- ✅ 메뉴 추천 Activity 등록 -->
+        <activity
+            android:name=".MenuActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
+        <!-- ✅ 주요 부스 검색 Activity 등록 -->
+        <activity
+            android:name=".EventActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
+        <!-- ✅ Temi Skill 등록 (이 부분 추가) -->
+        <meta-data
+            android:name="com.robotemi.sdk.metadata.SKILL"
+            android:value="@string/app_name" />
+
+        <provider
+            android:name="com.robotemi.sdk.TemiSdkContentProvider"
+            android:enabled="true"
+            android:exported="false"
+            android:authorities="${applicationId}.com.robotemi.sdk" />
+
+    </application>
+
+</manifest>
