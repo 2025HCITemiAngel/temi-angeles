@@ -79,6 +79,8 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
             return imageUris.size();
         }
 
+
+
         public Object getItem(int position) {
             return imageUris.get(position);
         }
@@ -91,9 +93,9 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
             ImageView imageView;
             if (convertView == null) {
                 imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
+                imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 900));
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             } else {
                 imageView = (ImageView) convertView;
             }

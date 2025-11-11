@@ -38,9 +38,11 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
 
     private PreviewView previewView;
     private TextView countdownText;
+    private TextView repetitionText;
     private ImageCapture imageCapture;
 
     private int countdownCount = 4;
+    private final int totalRepetitions = 4;
     private final ArrayList<String> capturedImagePaths = new ArrayList<>();
 
     @Override
@@ -52,6 +54,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
 
         previewView = findViewById(R.id.camera_preview);
         countdownText = findViewById(R.id.countdown_text);
+        repetitionText = findViewById(R.id.repetition_text);
 
         if (allPermissionsGranted()) {
             startCamera();
@@ -144,6 +147,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     }
 
     private void startNextCountdown() {
+        repetitionText.setText(String.format(Locale.getDefault(), "%d/%d", totalRepetitions - countdownCount + 1, totalRepetitions));
         new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 countdownText.setText(String.valueOf(millisUntilFinished / 1000));
