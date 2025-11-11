@@ -35,7 +35,6 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phototemi_picture_select);
 
         pictureGrid = findViewById(R.id.picture_grid);
-        Button retakeButton = findViewById(R.id.retake_button);
         doneButton = findViewById(R.id.done_button);
 
         imageUris = getIntent().getStringArrayListExtra("captured_images");
@@ -50,13 +49,6 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
         pictureGrid.setOnItemClickListener((parent, view, position, id) -> {
             adapter.toggleSelection(position);
             doneButton.setEnabled(adapter.getSelectedItemCount() == 2);
-        });
-
-        retakeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(PhotoTemiPictureSelectActivity.this, PhotoTemi.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
         });
 
         doneButton.setOnClickListener(v -> {
