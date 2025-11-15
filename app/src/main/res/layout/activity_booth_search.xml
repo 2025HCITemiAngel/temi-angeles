@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#EEF4FF"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- 제목 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="8dp"
+        android:text="주요 부스 안내"
+        android:textColor="#2B87F4"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <!-- 부제목 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="원하시는 조건을 선택하여 부스를 찾아보세요"
+        android:textColor="#2B87F4"
+        android:textSize="24sp" />
+
+    <!-- 선택 패널들 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- 참여대상 패널 -->
+        <LinearLayout
+            android:id="@+id/panelTarget"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/blue_border"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_participant_target" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="참여대상"
+                android:textColor="#2B87F4"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnTarget1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:text="전국민 대상"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#2B87F4"/>
+
+                    <Button
+                        android:id="@+id/btnTarget2"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="초등학생 이상"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTarget3"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="중학생 이상"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTarget4"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="초·중·고 학생 및 일반 관람객"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTarget5"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="누구나(제한없음)"
+                        android:textColor="#2B87F4" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- 소요시간 패널 -->
+        <LinearLayout
+            android:id="@+id/panelTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/blue_border"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_require_time" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="소요시간"
+                android:textColor="#2B87F4"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnTime1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="5분 내외"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTime2"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="10분 내외"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTime3"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="30분 내외"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTime4"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="60분 내외"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnTime5"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="90분 내외"
+                        android:textColor="#2B87F4" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- 분야 패널 -->
+        <LinearLayout
+            android:id="@+id/panelField"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/blue_border"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_department"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="분야"
+                android:textColor="#2B87F4"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- 스크롤이 필요한 영역 -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnField1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="에너지신산업"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField2"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="인공지능"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField3"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="이차전지"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField4"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="빅데이터"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField5"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="차세대반도체"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField6"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="바이오헬스"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField7"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="지능형로봇"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField8"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="첨단소재나노융합"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField9"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="차세대디스플레이"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField10"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="데이터보안활용융합"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField11"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="사물인터넷"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField12"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="실감미디어"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField13"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="그린바이오"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField14"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="차세대통신"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField15"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="항공드론"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField16"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="미래자동차"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField17"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="반도체소부장"
+                        android:textColor="#2B87F4" />
+
+                    <Button
+                        android:id="@+id/btnField18"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/button_unselected_selector"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="에코업"
+                        android:textColor="#2B87F4" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 검색 버튼 -->
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#2A7EF3"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:text="선택한 조건으로 부스 찾기"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:cornerRadius="20sp" />
+
+</LinearLayout>

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class EventDatabase extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "event_db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public EventDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -24,6 +24,7 @@ public class EventDatabase extends SQLiteOpenHelper {
                 "사전모집여부 TEXT, " +
                 "참여대상 TEXT, " +
                 "소요시간 INTEGER, " +
+                "소요시간_원본 TEXT, " +
                 "체험기간 TEXT, " +
                 "체험시간 TEXT, " +
                 "url TEXT" +
@@ -33,7 +34,9 @@ public class EventDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS events");
-        onCreate(db);
+        if (oldVersion < 2) {
+            // 소요시간_원본 컬럼 추가
+            db.execSQL("ALTER TABLE events ADD COLUMN 소요시간_원본 TEXT");
+        }
     }
 }

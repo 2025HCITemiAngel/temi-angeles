@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. 선택된 상태 (android:state_selected="true") -->
+    <!-- 이 상태일 때 보여줄 배경입니다. -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <!-- 파란색 배경 -->
+            <solid android:color="#2A7EF3" />
+            <!-- 둥근 모서리 (필요하다면) -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- 2. 기본 상태 (아무 상태도 아닐 때) -->
+    <!-- 이 상태일 때 보여줄 배경입니다. -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- 흰색 배경 -->
+            <solid android:color="#FFFFFF" />
+            <!-- 둥근 모서리 (필요하다면) -->
+            <corners android:radius="8dp" />
+            <!-- 테두리 (선택 사항, 필요 없다면 stroke 부분 삭제) -->
+            <stroke android:width="1dp" android:color="#D4E3F3" />
+        </shape>
+    </item>
+
+</selector>

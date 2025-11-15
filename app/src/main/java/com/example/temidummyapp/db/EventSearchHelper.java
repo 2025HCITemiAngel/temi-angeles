@@ -31,9 +31,13 @@ public class EventSearchHelper {
         try {
             int idx분야 = cursor.getColumnIndex("분야");
             int idx대제목 = cursor.getColumnIndex("대제목");
+            int idx한줄소개 = cursor.getColumnIndex("한줄소개");
             int idx사전모집 = cursor.getColumnIndex("사전모집여부");
             int idx대상 = cursor.getColumnIndex("참여대상");
             int idx시간 = cursor.getColumnIndex("소요시간");
+            int idx시간원본 = cursor.getColumnIndex("소요시간_원본");
+            int idx체험기간 = cursor.getColumnIndex("체험기간");
+            int idx체험시간 = cursor.getColumnIndex("체험시간");
             int idxURL = cursor.getColumnIndex("url");
 
             while (cursor.moveToNext()) {
@@ -41,9 +45,13 @@ public class EventSearchHelper {
 
                 item.put("분야", safeGet(cursor, idx분야));
                 item.put("대제목", safeGet(cursor, idx대제목));
+                item.put("한줄소개", safeGet(cursor, idx한줄소개));
                 item.put("사전모집여부", safeGet(cursor, idx사전모집));
                 item.put("참여대상", safeGet(cursor, idx대상));
                 item.put("소요시간", safeGet(cursor, idx시간));
+                item.put("소요시간_원본", safeGet(cursor, idx시간원본));
+                item.put("체험기간", safeGet(cursor, idx체험기간));
+                item.put("체험시간", safeGet(cursor, idx체험시간));
                 item.put("url", safeGet(cursor, idxURL));
 
                 results.add(item);
