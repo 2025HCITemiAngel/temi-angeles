@@ -40,7 +40,15 @@ public class BoothCardAdapter extends RecyclerView.Adapter<BoothCardAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HashMap<String, String> item = boothList.get(position);
+        try {
+            if (boothList == null || position < 0 || position >= boothList.size()) {
+                return;
+            }
+            
+            HashMap<String, String> item = boothList.get(position);
+            if (item == null) {
+                return;
+            }
 
         // 데이터 추출
         String title = item.containsKey("대제목") ? item.get("대제목") : "";
@@ -125,6 +133,9 @@ public class BoothCardAdapter extends RecyclerView.Adapter<BoothCardAdapter.View
                 }
             }
         });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -83,7 +83,7 @@
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@null"
                         android:background="@drawable/button_unselected_selector"
-                        android:text="전국민 대상"
+                        android:text="초등학생"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="#2B87F4"/>
@@ -97,7 +97,7 @@
                         android:background="@drawable/button_unselected_selector"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:text="초등학생 이상"
+                        android:text="중학생"
                         android:textColor="#2B87F4" />
 
                     <Button
@@ -109,30 +109,18 @@
                         android:background="@drawable/button_unselected_selector"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:text="중학생 이상"
+                        android:text="고등학생"
                         android:textColor="#2B87F4" />
 
                     <Button
                         android:id="@+id/btnTarget4"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_marginBottom="8dp"
                         android:backgroundTint="@null"
                         android:background="@drawable/button_unselected_selector"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:text="초·중·고 학생 및 일반 관람객"
-                        android:textColor="#2B87F4" />
-
-                    <Button
-                        android:id="@+id/btnTarget5"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:backgroundTint="@null"
-                        android:background="@drawable/button_unselected_selector"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:text="누구나(제한없음)"
+                        android:text="누구나"
                         android:textColor="#2B87F4" />
                 </LinearLayout>
             </ScrollView>
@@ -256,14 +244,30 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_department"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="분야"
-                android:textColor="#2B87F4"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:id="@+id/textFieldTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="분야"
+                    android:textColor="#2B87F4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="아래로 스크롤 해보세요!"
+                    android:textColor="#2B87F4"
+                    android:textSize="12sp" />
+            </RelativeLayout>
 
             <!-- 스크롤이 필요한 영역 -->
             <ScrollView

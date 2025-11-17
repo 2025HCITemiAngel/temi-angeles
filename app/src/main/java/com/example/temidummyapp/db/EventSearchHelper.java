@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EventSearchHelper {
 
@@ -16,19 +17,81 @@ public class EventSearchHelper {
         dbHelper = new EventDatabase(context);
     }
 
-    // 안전하게 null 체크된 버전
-    public ArrayList<HashMap<String, String>> search(String 분야, String 사전모집, String 대상, int 최대시간) {
+    // 안전하게 null 체크된 버전 (다중 선택 지원)
+    public ArrayList<HashMap<String, String>> search(List<String> 분야목록, String 사전모집, List<String> 대상목록, List<Integer> 최대시간목록) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ArrayList<HashMap<String, String>> results = new ArrayList<>();
 
         String sql = "SELECT * FROM events WHERE 1=1 ";
-        if (분야 != null && 분야.length() > 0) sql += "AND 분야='" + 분야 + "' ";
+        
+        // 분야: OR 조건 (여러 분야 선택 가능)
+        if (분야목록 != null && !분야목록.isEmpty()) {
+            sql += "AND (";
+            for (int i = 0; i < 분야목록.size(); i++) {
+                if (i > 0) sql += " OR ";
+                String 분야 = 분야목록.get(i);
+                if (분야 != null) {
+                    // SQL 인젝션 방지: 작은따옴표 이스케이프
+                    분야 = 분야.replace("'", "''");
+                    sql += "분야='" + 분야 + "'";
+                }
+            }
+            sql += ") ";
+        }
+        
         if (사전모집 != null && 사전모집.length() > 0) sql += "AND 사전모집여부='" + 사전모집 + "' ";
-        if (대상 != null && 대상.length() > 0) sql += "AND 참여대상='" + 대상 + "' ";
-        if (최대시간 > 0) sql += "AND 소요시간<=" + 최대시간;
+        
+        // 참여대상: OR 조건 (여러 대상 선택 가능)
+        if (대상목록 != null && !대상목록.isEmpty()) {
+            sql += "AND (";
+            for (int i = 0; i < 대상목록.size(); i++) {
+                if (i > 0) sql += " OR ";
+                String 대상 = 대상목록.get(i);
+                
+                // 각 버튼에 해당하는 "이상" 버전과 "누구나" 포함
+                if (대상 != null) {
+                    if (대상.equals("초등학생")) {
+                        // 초등학생 선택 시: 초등학생 이상 + 누구나
+                        sql += "(참여대상='초등학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("중학생")) {
+                        // 중학생 선택 시: 중학생 이상 + 누구나
+                        sql += "(참여대상='중학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("고등학생")) {
+                        // 고등학생 선택 시: 고등학생 이상 + 누구나
+                        sql += "(참여대상='고등학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("누구나")) {
+                        // 누구나 선택 시: 누구나만
+                        sql += "참여대상='누구나'";
+                    } else {
+                        // 기타 경우 (호환성 유지, SQL 인젝션 방지)
+                        String safe대상 = 대상.replace("'", "''");
+                        sql += "참여대상='" + safe대상 + "'";
+                    }
+                }
+            }
+            sql += ") ";
+        }
+        
+        // 소요시간: OR 조건 (여러 시간 선택 가능)
+        if (최대시간목록 != null && !최대시간목록.isEmpty()) {
+            sql += "AND (";
+            for (int i = 0; i < 최대시간목록.size(); i++) {
+                if (i > 0) sql += " OR ";
+                sql += "소요시간<=" + 최대시간목록.get(i);
+            }
+            sql += ") ";
+        }
 
-        Cursor cursor = db.rawQuery(sql, null);
+        Log.d("EventSearchHelper", "SQL: " + sql);
+        
+        Cursor cursor = null;
         try {
+            cursor = db.rawQuery(sql, null);
+            if (cursor == null) {
+                Log.e("EventSearchHelper", "Cursor is null");
+                return results;
+            }
+            
             int idx분야 = cursor.getColumnIndex("분야");
             int idx대제목 = cursor.getColumnIndex("대제목");
             int idx한줄소개 = cursor.getColumnIndex("한줄소개");
@@ -57,10 +120,23 @@ public class EventSearchHelper {
                 results.add(item);
             }
         } catch (Exception e) {
-            Log.e("EventSearchHelper", "DB search error: " + e.getMessage());
+            Log.e("EventSearchHelper", "DB search error: " + e.getMessage(), e);
+            e.printStackTrace();
         } finally {
-            cursor.close();
-            db.close();
+            if (cursor != null) {
+                try {
+                    cursor.close();
+                } catch (Exception e) {
+                    Log.e("EventSearchHelper", "Error closing cursor", e);
+                }
+            }
+            if (db != null && db.isOpen()) {
+                try {
+                    db.close();
+                } catch (Exception e) {
+                    Log.e("EventSearchHelper", "Error closing db", e);
+                }
+            }
         }
 
         return results;
