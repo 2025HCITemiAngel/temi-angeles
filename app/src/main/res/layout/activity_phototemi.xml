@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Photo with Temi"
-            android:textSize="24sp"
+            android:textSize="48sp"
             android:textStyle="bold" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="마음에 드는 템플릿을 골라보세요"
-            android:textSize="16sp" />
+            android:textSize="24sp" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -42,36 +42,36 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="240dp"
+                    android:layout_height="500dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="Default Template"
                     android:src="@drawable/photo_template_default" />
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="240dp"
+                    android:layout_height="500dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="Black Template"
                     android:src="@drawable/photo_template_black" />
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="240dp"
+                    android:layout_height="500dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="Coshow Template"
                     android:src="@drawable/photo_template_coshow" />
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="240dp"
+                    android:layout_height="500dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="Developer Template"
                     android:src="@drawable/photo_template_developer" />
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="240dp"
+                    android:layout_height="500dp"
                     android:contentDescription="Picnic Template"
                     android:src="@drawable/photo_template_picnic" />
 
@@ -80,9 +80,12 @@
 
         <Button
             android:id="@+id/action_button"
-            android:layout_width="wrap_content"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:text="시작하기" />
+            android:backgroundTint="#0a0a0a"
+            android:text="시작하기"
+            android:textColor="#ffffff"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
