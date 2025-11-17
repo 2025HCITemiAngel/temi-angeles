@@ -40,7 +40,7 @@ import okhttp3.Response;
 public class PhotoTemiResultActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoTemiResult";
-    private static final String UPLOAD_URL = "http://54.197.249.100:3000/api/upload";
+    private static final String UPLOAD_URL = "https://phototemi.kwidea.com/api/upload";
 
     private Bitmap finalImageBitmap;
     private ImageView resultImage;

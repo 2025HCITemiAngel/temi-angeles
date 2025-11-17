@@ -36,6 +36,12 @@
             </intent-filter>
         </activity>
 
+        <!-- ✅ 부스 검색 결과 Activity 등록 -->
+        <activity
+            android:name=".BoothResultsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
         <!-- ✅ 사진 찍기 관련 Activity 등록 -->
         <activity
             android:name=".PhotoTemi"
