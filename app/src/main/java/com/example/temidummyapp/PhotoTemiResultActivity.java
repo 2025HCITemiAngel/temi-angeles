@@ -10,16 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.zxing.BarcodeFormat;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +48,6 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
 
     private Bitmap finalImageBitmap;
     private ImageView resultImage;
-    private ImageView qrCodeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,6 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phototemi_result);
 
         resultImage = findViewById(R.id.result_image);
-        qrCodeImage = findViewById(R.id.qr_code_image);
         Button homeButton = findViewById(R.id.home_button);
         Button shareButton = findViewById(R.id.share_button);
 
@@ -104,13 +98,12 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
 
         shareButton.setOnClickListener(v -> {
             if (finalImageBitmap != null) {
-                uploadImageAndGenerateQrCode(finalImageBitmap);
+                uploadImage(finalImageBitmap);
             }
         });
     }
 
-    private void uploadImageAndGenerateQrCode(Bitmap bitmap) {
-        // Bitmap을 byte[]로 변환
+    private void uploadImage(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
@@ -143,19 +136,12 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(responseBody);
                         String viewUrl = json.getString("viewUrl");
 
-                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                        Bitmap qrBitmap = barcodeEncoder.encodeBitmap(viewUrl, BarcodeFormat.QR_CODE, 400, 400);
-
-                        runOnUiThread(() -> {
-                            qrCodeImage.setImageBitmap(qrBitmap);
-                            resultImage.setVisibility(View.GONE);
-                            qrCodeImage.setVisibility(View.VISIBLE);
-                        });
+                        Intent intent = new Intent(PhotoTemiResultActivity.this, PhotoTemiQrCodeActivity.class);
+                        intent.putExtra("viewUrl", viewUrl);
+                        startActivity(intent);
 
                     } catch (JSONException e) {
                         Log.e(TAG, "JSON parsing error: ", e);
-                    } catch (Exception e) {
-                        Log.e(TAG, "QR code generation error: ", e);
                     }
                 } else {
                     final String responseBody = response.body().string();
@@ -187,7 +173,6 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
 
     private static OkHttpClient getUnsafeOkHttpClient() {
         try {
-            // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
@@ -205,21 +190,14 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
                     }
             };
 
-            // Install the all-trusting trust manager
             final SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
-            // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            builder.hostnameVerifier((hostname, session) -> true);
 
             return builder.build();
         } catch (Exception e) {

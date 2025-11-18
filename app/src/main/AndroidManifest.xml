@@ -46,12 +46,12 @@
         <activity
             android:name=".PhotoTemi"
             android:exported="false"
-            android.screenOrientation="landscape" />
+            android:screenOrientation="landscape" />
 
         <activity
             android:name=".PhotoTemiFilmingActivity"
             android:exported="false"
-            android.screenOrientation="landscape" />
+            android:screenOrientation="landscape" />
 
         <activity
             android:name=".PhotoTemiPictureSelectActivity"
@@ -60,6 +60,11 @@
 
         <activity
             android:name=".PhotoTemiResultActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".PhotoTemiQrCodeActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
 

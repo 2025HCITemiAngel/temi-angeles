@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/result_title"
         android:layout_centerHorizontal="true"
-        android:text="어떠신가요?"
+        android:text="촬영한 사진이 마음에 드시나요?"
         android:textSize="24sp"
         android:layout_marginBottom="24dp"/>
 
@@ -36,19 +36,6 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter" />
 
-    <!-- QR 코드가 표시될 ImageView -->
-    <ImageView
-        android:id="@+id/qr_code_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/result_image"
-        android:layout_alignBottom="@id/result_image"
-        android:layout_alignLeft="@id/result_image"
-        android:layout_alignRight="@id/result_image"
-        android:background="#FFFFFF" 
-        android:visibility="gone" 
-        android:scaleType="fitCenter" />
-
     <LinearLayout
         android:id="@+id/buttons_layout"
         android:layout_width="wrap_content"
@@ -60,16 +47,13 @@
 
         <Button
             android:id="@+id/share_button"
-            android:layout_width="wrap_content"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="QR코드로 공유" />
-
-        <Button
-            android:id="@+id/home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="메인으로 돌아가기" />
+            android:textSize="36sp"
+            android:backgroundTint="#0a0a0a"
+            android:textColor="#ffffff"
+            android:text="QR코드 받기"
+            />
     </LinearLayout>
 
 </RelativeLayout>
