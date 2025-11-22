@@ -6,6 +6,7 @@
     <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <!-- 저장소 권한 (Android 9 이하에서 사진 저장 시 필요) -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -46,12 +47,12 @@
         <activity
             android:name=".PhotoTemi"
             android:exported="false"
-            android.screenOrientation="landscape" />
+            android:screenOrientation="landscape" />
 
         <activity
             android:name=".PhotoTemiFilmingActivity"
             android:exported="false"
-            android.screenOrientation="landscape" />
+            android:screenOrientation="landscape" />
 
         <activity
             android:name=".PhotoTemiPictureSelectActivity"
