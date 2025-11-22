@@ -1,78 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E9EEF3"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
     android:padding="24dp"
     tools:context=".MenuActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:gravity="start">
+    <!-- 뒤로가기 버튼 -->
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/menu_back_button"
+        android:padding="4dp"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_back_button"
-            android:padding="4dp"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="#333333" />
-    </LinearLayout>
-
-    <LinearLayout
+    <!-- 타이틀 -->
+    <TextView
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_marginTop="60dp"
+        android:text="테미의 메뉴 추천"
+        android:textColor="#2A7EF3"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_coffee" />
+    <!-- 안내 텍스트 -->
+    <TextView
+        android:id="@+id/guideText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="&quot;메뉴 추천 받기&quot;를 눌러보세요! 테미가 오늘 식사를 추천해요"
+        android:textColor="#5B9EF7"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleText" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_title"
-            android:textColor="#151B26"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <!-- 로봇 이미지 -->
 
+    <!-- 말풍선 배경 -->
+
+    <!-- 말풍선 텍스트 -->
+
+    <!-- 메뉴 리스트 컨테이너 -->
+
+    <ImageView
+        android:id="@+id/robotImage"
+        android:layout_width="451dp"
+        android:layout_height="404dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_temi_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideText"
+        app:layout_constraintVertical_bias="0.354" />
+
+    <ImageView
+        android:id="@+id/speechBubbleBackground"
+        android:layout_width="380dp"
+        android:layout_height="157dp"
+        android:layout_marginStart="396dp"
+        android:layout_marginTop="156dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_temi_menu_result"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/speechBubble"
+        android:layout_width="290dp"
+        android:layout_height="37dp"
+        android:text="테미가 추천하는 메뉴는.."
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@id/speechBubbleBackground"
+        app:layout_constraintEnd_toEndOf="@id/speechBubbleBackground"
+        app:layout_constraintHorizontal_bias="0.603"
+        app:layout_constraintStart_toStartOf="@id/speechBubbleBackground"
+        app:layout_constraintTop_toTopOf="@id/speechBubbleBackground"
+        app:layout_constraintVertical_bias="0.327" />
+
+    <!-- 메뉴 추천 받기 버튼 -->
     <LinearLayout
         android:id="@+id/menuSlot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_width="174dp"
+        android:layout_height="321dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideText"
+        app:layout_constraintVertical_bias="0.516">
 
         <TextView
             android:id="@+id/menuPrev2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:textColor="#B6C2CF"
-            android:textSize="18sp"
+            android:padding="4dp"
+            android:text="떡볶이"
+            android:textColor="#D0D8E0"
+            android:textSize="28sp"
             tools:text="떡볶이" />
 
         <TextView
             android:id="@+id/menuPrev1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:textColor="#8A97A7"
-            android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
+            android:padding="4dp"
+            android:text="돼지국밥"
+            android:textColor="#A0AEC0"
+            android:textSize="32sp"
             tools:text="돼지국밥" />
 
         <TextView
@@ -80,8 +132,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            android:text="밀면"
             android:textColor="#000000"
-            android:textSize="26sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             tools:text="밀면" />
 
@@ -89,41 +142,55 @@
             android:id="@+id/menuNext1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:textColor="#8A97A7"
-            android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
+            android:padding="4dp"
+            android:text="돼지국밥"
+            android:textColor="#A0AEC0"
+            android:textSize="32sp"
             tools:text="돼지국밥" />
 
         <TextView
             android:id="@+id/menuNext2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:textColor="#B6C2CF"
-            android:textSize="18sp"
+            android:padding="4dp"
+            android:text="떡볶이"
+            android:textColor="#D0D8E0"
+            android:textSize="28sp"
             tools:text="떡볶이" />
     </LinearLayout>
+
+    <!-- 결과 텍스트 (초기에는 숨김) -->
+    <Button
+        android:id="@+id/recommendButton"
+        android:layout_width="252dp"
+        android:layout_height="87dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="#2A7EF3"
+        android:paddingHorizontal="48dp"
+        android:paddingVertical="14dp"
+        android:text="메뉴 추천 받기"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:cornerRadius="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/menu_result_placeholder"
         android:textColor="#151B26"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/recommendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/recommendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="#2A7EF3"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="12dp"
-        android:text="@string/menu_recommend_button"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
