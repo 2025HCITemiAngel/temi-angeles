@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEF4FF"
@@ -20,51 +21,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 상단 오른쪽: 언어 토글 -->
-    <LinearLayout
-        android:id="@+id/lang_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="24dp"
+    <!-- 상단 전체를 채우는 래퍼 컨테이너 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/btn_kor"
+        <!-- 상단 오른쪽: 언어 토글 (래퍼 안으로 이동) -->
+        <LinearLayout
+            android:id="@+id/lang_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="한국어"
-            android:textSize="14sp"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="8dp"
-            android:background="#1A7DFF"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="4dp"/>
+            android:orientation="horizontal"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/btn_eng"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="English"
-            android:textSize="14sp"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="8dp"
-            android:background="#DDE6F5"
-            android:textColor="#4A5A6A"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/btn_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="한국어"
+                android:textSize="14sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp"
+            android:background="#1976D2"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="4dp"/>
 
-    <!-- 상단 안내 바 + 마이크 -->
+            <TextView
+                android:id="@+id/btn_eng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="English"
+                android:textSize="14sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp"
+                android:background="#DDE6F5"
+                android:textColor="#4A5A6A"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 상단 안내 바 + 마이크 (top_wrapper 아래로 이동) -->
     <LinearLayout
         android:id="@+id/top_bar"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="8dp"
         android:background="#E3F0FF"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:paddingHorizontal="40dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_admin"
+        app:layout_constraintTop_toBottomOf="@id/top_wrapper"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -74,35 +87,46 @@
             android:layout_height="72dp"
             android:src="@drawable/ic_mic"
             android:background="@drawable/bg_circle_white"
-            android:padding="16dp"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
             android:layout_marginEnd="24dp"/>
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="이렇게 말해보세요. 헤이 테미, 부스로 안내해줘."
             android:textColor="#111111"
             android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- 메인 컨텐츠 컨테이너: 좌/우 분할 -->
+    <!-- 하단 전체를 채우는 래퍼 컨테이너 -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/content_container"
+        android:id="@+id/bottom_wrapper"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="40dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
         app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 메인 컨텐츠 컨테이너: 좌/우 분할 (래퍼 안으로 이동) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginEnd="120dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="40dp"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
         <!-- 왼쪽: 길 안내 (큰 카드) -->
         <androidx.cardview.widget.CardView
@@ -322,10 +346,10 @@
                             android:layout_marginTop="2dp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>  <!-- bottom_row -->
+        </androidx.constraintlayout.widget.ConstraintLayout>      <!-- right_panel -->
+        </androidx.constraintlayout.widget.ConstraintLayout>          <!-- content_container -->
+    </androidx.constraintlayout.widget.ConstraintLayout>          <!-- bottom_wrapper 추가 -->
 
     <!-- 캐릭터: 화면 기준 오른쪽 하단 고정 -->
     <ImageView
@@ -333,13 +357,14 @@
         android:layout_width="140dp"
         android:layout_height="160dp"
         android:src="@drawable/ic_temibot"
+        android:elevation="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <!-- 관리자 설정 패널 (초기 숨김) -->
-    <include
+        <include
         android:id="@+id/include_admin_panel"
         layout="@layout/panel_admin_mapping"
         android:visibility="gone"/>
