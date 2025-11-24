@@ -1,6 +1,7 @@
 package com.example.temidummyapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import com.robotemi.sdk.Robot;
 import com.robotemi.sdk.TtsRequest;
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnGoToLocationSta
     private boolean debugOutline = false;
     private boolean mapBitmapLoaded = false;
     private ImageView character; // 챗봇 아이콘
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements OnGoToLocationSta
 
         // 상태바 & 네비게이션바 숨김
         applyImmersiveMode();
+
+        // 오디오 녹음 권한 확인 및 요청
+        checkAndRequestAudioPermission();
 
         robot = Robot.getInstance();
 
@@ -548,6 +555,44 @@ public class MainActivity extends AppCompatActivity implements OnGoToLocationSta
     private void showCharacterIcon() {
         if (character != null) {
             character.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // 오디오 녹음 권한 확인 및 요청
+    private void checkAndRequestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.RECORD_AUDIO},
+                    PERMISSION_REQUEST_RECORD_AUDIO);
+        } else {
+            // 권한이 이미 있으면 Wake Word 서비스 시작
+            startWakeWordService();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_RECORD_AUDIO) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용되면 Wake Word 서비스 시작
+                startWakeWordService();
+            } else {
+                Toast.makeText(this, "오디오 녹음 권한이 필요합니다. Wake Word 기능을 사용할 수 없습니다.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void startWakeWordService() {
+        android.util.Log.d("MainActivity", "Starting Wake Word Service...");
+        TemiApplication app = (TemiApplication) getApplication();
+        if (app != null && app.getWakeWordService() != null) {
+            app.getWakeWordService().startListening();
+            android.util.Log.d("MainActivity", "Wake Word Service startListening() called");
+        } else {
+            android.util.Log.e("MainActivity", "Failed to get Wake Word Service");
+            Toast.makeText(this, "Wake Word 서비스를 초기화할 수 없습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 }
