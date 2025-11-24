@@ -21,7 +21,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final long SPIN_DURATION_MS = 2200L;
 
     private final String[] menus = {
-            "국밥", "밀면", "떡볶이", "피자", "치킨", "햄버거", "비빔밥", "돈까스", "떡갈비", 
+            "국밥", "밀면", "떡볶이", "피자", "치킨", "햄버거", "비빔밥", "돈까스", "떡갈비",
     };
 
     private TextView menuPrev2;

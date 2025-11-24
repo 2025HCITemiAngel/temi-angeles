@@ -15,7 +15,7 @@ import java.util.List;
 
 public class EventActivity extends AppCompatActivity {
 
-    private Button btnTarget1, btnTarget2, btnTarget3, btnTarget4;
+    private Button btnTarget1, btnTarget2, btnTarget3, btnTarget4, btnTarget5;
     private Button btnTime1, btnTime2, btnTime3, btnTime4, btnTime5;
     private Button btnField1, btnField2, btnField3, btnField4, btnField5, btnField6, btnField7, btnField8, btnField9, btnField10;
     private Button btnField11, btnField12, btnField13, btnField14, btnField15, btnField16, btnField17, btnField18;
@@ -35,6 +35,7 @@ public class EventActivity extends AppCompatActivity {
         btnTarget2 = findViewById(R.id.btnTarget2);
         btnTarget3 = findViewById(R.id.btnTarget3);
         btnTarget4 = findViewById(R.id.btnTarget4);
+        btnTarget5 = findViewById(R.id.btnTarget5);
 
         // 소요시간 버튼
         btnTime1 = findViewById(R.id.btnTime1);
@@ -93,6 +94,7 @@ public class EventActivity extends AppCompatActivity {
         btnTarget2.setOnClickListener(targetListener);
         btnTarget3.setOnClickListener(targetListener);
         btnTarget4.setOnClickListener(targetListener);
+        btnTarget5.setOnClickListener(targetListener);
 
         // 소요시간 버튼 클릭 리스너 (중복 클릭 가능)
         View.OnClickListener timeListener = new View.OnClickListener() {
@@ -207,6 +209,7 @@ public class EventActivity extends AppCompatActivity {
         btnTarget2.setBackgroundTintList(null);
         btnTarget3.setBackgroundTintList(null);
         btnTarget4.setBackgroundTintList(null);
+        btnTarget5.setBackgroundTintList(null);
 
         // 소요시간 버튼 초기화
         btnTime1.setBackgroundTintList(null);
