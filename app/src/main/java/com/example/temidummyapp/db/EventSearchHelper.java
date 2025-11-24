@@ -48,16 +48,19 @@ public class EventSearchHelper {
                 if (i > 0) sql += " OR ";
                 String 대상 = 대상목록.get(i);
                 
-                // 각 버튼에 해당하는 "이상" 버전과 "누구나" 포함
+                // 각 버튼에 해당하는 조건 처리
                 if (대상 != null) {
-                    if (대상.equals("초등학생")) {
-                        // 초등학생 선택 시: 초등학생 이상 + 누구나
-                        sql += "(참여대상='초등학생 이상' OR 참여대상='누구나')";
-                    } else if (대상.equals("중학생")) {
-                        // 중학생 선택 시: 중학생 이상 + 누구나
-                        sql += "(참여대상='중학생 이상' OR 참여대상='누구나')";
-                    } else if (대상.equals("고등학생")) {
-                        // 고등학생 선택 시: 고등학생 이상 + 누구나
+                    if (대상.equals("초등학생 이상")) {
+                        // 초등학생 이상 선택 시: 초등학생 이상, 초등학생(고학년)이상, 중학생 이상, 고등학생 이상, 누구나
+                        sql += "(참여대상='초등학생 이상' OR 참여대상='초등학생(고학년)이상' OR 참여대상='중학생 이상' OR 참여대상='고등학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("초등학생(고학년)이상")) {
+                        // 초등학생(고학년)이상 선택 시: 초등학생(고학년)이상, 중학생 이상, 고등학생 이상, 누구나
+                        sql += "(참여대상='초등학생(고학년)이상' OR 참여대상='중학생 이상' OR 참여대상='고등학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("중학생 이상")) {
+                        // 중학생 이상 선택 시: 중학생 이상, 고등학생 이상, 누구나
+                        sql += "(참여대상='중학생 이상' OR 참여대상='고등학생 이상' OR 참여대상='누구나')";
+                    } else if (대상.equals("고등학생 이상")) {
+                        // 고등학생 이상 선택 시: 고등학생 이상, 누구나
                         sql += "(참여대상='고등학생 이상' OR 참여대상='누구나')";
                     } else if (대상.equals("누구나")) {
                         // 누구나 선택 시: 누구나만
@@ -101,6 +104,7 @@ public class EventSearchHelper {
             int idx시간원본 = cursor.getColumnIndex("소요시간_원본");
             int idx체험기간 = cursor.getColumnIndex("체험기간");
             int idx체험시간 = cursor.getColumnIndex("체험시간");
+            int idx이미지파일 = cursor.getColumnIndex("이미지파일");
             int idxURL = cursor.getColumnIndex("url");
 
             while (cursor.moveToNext()) {
@@ -115,6 +119,7 @@ public class EventSearchHelper {
                 item.put("소요시간_원본", safeGet(cursor, idx시간원본));
                 item.put("체험기간", safeGet(cursor, idx체험기간));
                 item.put("체험시간", safeGet(cursor, idx체험시간));
+                item.put("이미지파일", safeGet(cursor, idx이미지파일));
                 item.put("url", safeGet(cursor, idxURL));
 
                 results.add(item);
