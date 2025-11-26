@@ -78,6 +78,12 @@ public class OpenAIService {
         void onError(String error);
     }
     
+    public interface StreamCallback {
+        void onStream(String chunk);
+        void onComplete();
+        void onError(String error);
+    }
+    
     public OpenAIService() {
         this.client = new OkHttpClient();
         this.gson = new Gson();
@@ -99,7 +105,76 @@ public class OpenAIService {
     }
     
     /**
-     * 채팅 완료 요청
+     * 채팅 완료 요청 (스트리밍 방식)
+     * @param messages 대화 기록
+     * @param callback 스트림 콜백
+     */
+    public void sendMessageStreaming(List<ChatMessage> messages, StreamCallback callback) {
+        if (!hasApiKey()) {
+            callback.onError("API 키가 설정되지 않았습니다.");
+            return;
+        }
+        
+        new Thread(() -> {
+            try {
+                JsonObject requestBody = buildRequestBody(messages, true);
+                RequestBody body = RequestBody.create(requestBody.toString(), JSON);
+                
+                Request request = new Request.Builder()
+                        .url(API_URL)
+                        .addHeader("Authorization", "Bearer " + apiKey)
+                        .addHeader("Content-Type", "application/json")
+                        .post(body)
+                        .build();
+                
+                Response response = client.newCall(request).execute();
+                
+                if (!response.isSuccessful()) {
+                    String errorBody = response.body() != null ? response.body().string() : "";
+                    Log.e(TAG, "API 오류 응답: " + errorBody);
+                    mainHandler.post(() -> callback.onError("API 오류 (코드: " + response.code() + ")"));
+                    return;
+                }
+                
+                // SSE 스트림 읽기
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(response.body().byteStream())
+                );
+                
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("data: ")) {
+                        String data = line.substring(6);
+                        
+                        // 스트림 종료 신호
+                        if (data.equals("[DONE]")) {
+                            mainHandler.post(callback::onComplete);
+                            break;
+                        }
+                        
+                        try {
+                            // 청크 파싱
+                            String chunk = parseStreamChunk(data);
+                            if (chunk != null && !chunk.isEmpty()) {
+                                mainHandler.post(() -> callback.onStream(chunk));
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "청크 파싱 오류: " + e.getMessage());
+                        }
+                    }
+                }
+                
+                reader.close();
+                
+            } catch (Exception e) {
+                Log.e(TAG, "스트리밍 오류", e);
+                mainHandler.post(() -> callback.onError("스트리밍 오류: " + e.getMessage()));
+            }
+        }).start();
+    }
+    
+    /**
+     * 채팅 완료 요청 (일반 방식 - 호환성 유지)
      * @param messages 대화 기록
      * @param callback 응답 콜백
      */
@@ -110,7 +185,7 @@ public class OpenAIService {
         }
         
         try {
-            JsonObject requestBody = buildRequestBody(messages);
+            JsonObject requestBody = buildRequestBody(messages, false);
             RequestBody body = RequestBody.create(requestBody.toString(), JSON);
             
             Request request = new Request.Builder()
@@ -157,11 +232,12 @@ public class OpenAIService {
     /**
      * OpenAI API 요청 본문 생성
      */
-    private JsonObject buildRequestBody(List<ChatMessage> messages) {
+    private JsonObject buildRequestBody(List<ChatMessage> messages, boolean stream) {
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty("model", "gpt-4o-mini"); // 비용 효율적인 모델
         requestBody.addProperty("temperature", 0.7);
         requestBody.addProperty("max_tokens", 500);
+        requestBody.addProperty("stream", stream); // 스트리밍 여부
         
         JsonArray messagesArray = new JsonArray();
         
@@ -181,6 +257,31 @@ public class OpenAIService {
         
         requestBody.add("messages", messagesArray);
         return requestBody;
+    }
+    
+    /**
+     * 스트림 청크 파싱
+     */
+    private String parseStreamChunk(String chunkData) {
+        try {
+            JsonObject json = gson.fromJson(chunkData, JsonObject.class);
+            
+            if (json.has("choices") && json.getAsJsonArray("choices").size() > 0) {
+                JsonObject choice = json.getAsJsonArray("choices").get(0).getAsJsonObject();
+                
+                if (choice.has("delta")) {
+                    JsonObject delta = choice.getAsJsonObject("delta");
+                    
+                    if (delta.has("content")) {
+                        return delta.get("content").getAsString();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "청크 파싱 실패: " + e.getMessage());
+        }
+        
+        return null;
     }
     
     /**
