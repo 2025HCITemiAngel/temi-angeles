@@ -2,6 +2,7 @@ package com.example.temidummyapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -34,6 +37,24 @@ public class ChatActivity extends BaseActivity {
     private View backButton;
     private boolean isWaitingForResponse = false;
 
+    // STT 관련
+    private SpeechToTextService sttService; // 배치 방식
+    private RealtimeSTTService realtimeSTTService; // 실시간 방식
+    private ImageButton btnMic;
+    private View listeningOverlay;
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO_STT = 1002;
+
+    // STT 모드
+    private enum STTMode {
+        REALTIME, // 실시간 입력
+        BATCH // 다 듣고 입력
+    }
+
+    private STTMode currentSTTMode = STTMode.REALTIME; // 기본값: 실시간
+    private TextView btnSTTRealtime;
+    private TextView btnSTTBatch;
+    private StringBuilder realtimeTextBuffer = new StringBuilder(); // 실시간 텍스트 버퍼
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +67,9 @@ public class ChatActivity extends BaseActivity {
 
         // OpenAI 서비스 초기화
         setupOpenAI();
+
+        // STT 서비스 초기화
+        setupSTT();
 
         // 채팅 저장소 초기화
         chatStorage = new ChatStorage(this);
@@ -170,6 +194,8 @@ public class ChatActivity extends BaseActivity {
     private void setupInputAndSendButton() {
         inputMessage = findViewById(R.id.input_message);
         btnSend = findViewById(R.id.btn_send);
+        btnMic = findViewById(R.id.btn_mic);
+        listeningOverlay = findViewById(R.id.listening_overlay);
 
         btnSend.setOnClickListener(v -> sendUserMessage());
 
@@ -178,6 +204,12 @@ public class ChatActivity extends BaseActivity {
             sendUserMessage();
             return true;
         });
+
+        // 마이크 버튼 클릭 - 녹음 시작
+        btnMic.setOnClickListener(v -> startListening());
+
+        // 듣기 모드 오버레이 터치 - 녹음 중지 및 전송
+        listeningOverlay.setOnClickListener(v -> stopListeningAndSend());
     }
 
     private void sendUserMessage() {
@@ -315,6 +347,14 @@ public class ChatActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         startWakeWordService();
+
+        // STT 서비스 리소스 해제
+        if (sttService != null) {
+            sttService.release();
+        }
+        if (realtimeSTTService != null) {
+            realtimeSTTService.release();
+        }
     }
 
     private void setupKeyboardListener() {
@@ -366,12 +406,200 @@ public class ChatActivity extends BaseActivity {
         openAIService = new OpenAIService();
         apiKeyManager = new ApiKeyManager(this);
 
-        // API 키 직접 설정
-        String apiKey = "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";
+        // API 키를 BuildConfig에서 가져오기
+        String apiKey = BuildConfig.OPENAI_API_KEY;
         apiKeyManager.saveApiKey(apiKey);
         openAIService.setApiKey(apiKey);
 
         Log.d(TAG, "OpenAI API 키 설정 완료");
+    }
+
+    private void setupSTT() {
+        // 배치 방식 STT 서비스
+        sttService = new SpeechToTextService(this);
+        
+        // 실시간 방식 STT 서비스
+        realtimeSTTService = new RealtimeSTTService(this);
+        
+        // OpenAI API 키를 BuildConfig에서 가져와 두 서비스 모두에 설정
+        String apiKey = BuildConfig.OPENAI_API_KEY;
+        sttService.setApiKey(apiKey);
+        realtimeSTTService.setApiKey(apiKey);
+        
+        // STT 모드 토글 버튼 설정
+        setupSTTModeButtons();
+        
+        Log.d(TAG, "STT 서비스 초기화 완료 (배치 + 실시간)");
+    }
+
+    /**
+     * STT 모드 토글 버튼 설정
+     */
+    private void setupSTTModeButtons() {
+        btnSTTRealtime = findViewById(R.id.btn_stt_realtime);
+        btnSTTBatch = findViewById(R.id.btn_stt_batch);
+
+        if (btnSTTRealtime == null || btnSTTBatch == null) {
+            return;
+        }
+
+        // 초기 UI 업데이트
+        updateSTTModeUI();
+
+        // 실시간 입력 버튼
+        btnSTTRealtime.setOnClickListener(v -> {
+            if (currentSTTMode != STTMode.REALTIME) {
+                currentSTTMode = STTMode.REALTIME;
+                updateSTTModeUI();
+                Toast.makeText(this, "실시간 입력 모드로 전환됨", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 다 듣고 입력 버튼
+        btnSTTBatch.setOnClickListener(v -> {
+            if (currentSTTMode != STTMode.BATCH) {
+                currentSTTMode = STTMode.BATCH;
+                updateSTTModeUI();
+                Toast.makeText(this, "다 듣고 입력 모드로 전환됨", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * STT 모드 UI 업데이트
+     */
+    private void updateSTTModeUI() {
+        if (btnSTTRealtime == null || btnSTTBatch == null) {
+            return;
+        }
+
+        if (currentSTTMode == STTMode.REALTIME) {
+            // 실시간 입력 활성화
+            btnSTTRealtime.setBackgroundColor(0xFF1976D2);
+            btnSTTRealtime.setTextColor(0xFFFFFFFF);
+            btnSTTBatch.setBackgroundColor(0xFFDDE6F5);
+            btnSTTBatch.setTextColor(0xFF4A5A6A);
+        } else {
+            // 다 듣고 입력 활성화
+            btnSTTRealtime.setBackgroundColor(0xFFDDE6F5);
+            btnSTTRealtime.setTextColor(0xFF4A5A6A);
+            btnSTTBatch.setBackgroundColor(0xFF1976D2);
+            btnSTTBatch.setTextColor(0xFFFFFFFF);
+        }
+    }
+
+    /**
+     * 음성 듣기 시작
+     */
+    private void startListening() {
+        // 녹음 권한 확인
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] { android.Manifest.permission.RECORD_AUDIO },
+                        PERMISSION_REQUEST_RECORD_AUDIO_STT);
+                return;
+            }
+        }
+
+        // 메시지 수신 중이면 무시
+        if (isWaitingForResponse) {
+            Toast.makeText(this, "메시지를 받는 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 녹음 시작
+        boolean started = sttService.startRecording();
+        if (started) {
+            // 듣기 모드 오버레이 표시
+            listeningOverlay.setVisibility(View.VISIBLE);
+            Log.d(TAG, "음성 듣기 시작됨");
+        } else {
+            Toast.makeText(this, "음성 녹음을 시작할 수 없습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 음성 듣기 중지 및 전송
+     */
+    private void stopListeningAndSend() {
+        if (currentSTTMode == STTMode.REALTIME) {
+            stopRealtimeListeningAndSend();
+        } else {
+            stopBatchListeningAndSend();
+        }
+    }
+
+    /**
+     * 실시간 입력 모드 중지 및 전송
+     */
+    private void stopRealtimeListeningAndSend() {
+        Log.d(TAG, "실시간 입력 중지 및 전송");
+
+        // 실시간 STT 중지
+        realtimeSTTService.stopRealtimeSTT();
+
+        // 오버레이 숨기기
+        listeningOverlay.setVisibility(View.GONE);
+
+        // 입력창의 텍스트 확인
+        String text = inputMessage.getText() != null ? inputMessage.getText().toString().trim() : "";
+
+        if (!text.isEmpty()) {
+            // 자동으로 전송
+            sendUserMessage();
+        } else {
+            Toast.makeText(this, "인식된 음성이 없습니다", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 다 듣고 입력 모드 중지 및 전송 (기존 배치 방식)
+     */
+    private void stopBatchListeningAndSend() {
+        if (!sttService.isRecording()) {
+            listeningOverlay.setVisibility(View.GONE);
+            return;
+        }
+
+        // 로딩 표시를 위해 오버레이 텍스트 변경
+        TextView listeningText = listeningOverlay.findViewById(R.id.listening_text);
+        TextView listeningInstruction = listeningOverlay.findViewById(R.id.listening_instruction);
+        listeningText.setText("변환 중...");
+        listeningInstruction.setText("잠시만 기다려주세요");
+
+        Log.d(TAG, "다 듣고 입력 모드 중지 및 변환 시작");
+
+        // 녹음 중지 및 STT 요청
+        sttService.stopRecordingAndTranscribe(new SpeechToTextService.TranscriptionCallback() {
+            @Override
+            public void onTranscriptionComplete(String transcribedText) {
+                Log.d(TAG, "음성 변환 완료: " + transcribedText);
+
+                // 오버레이 숨기기
+                listeningOverlay.setVisibility(View.GONE);
+                listeningText.setText("듣고 있습니다");
+                listeningInstruction.setText("화면을 터치하여 메시지 보내기");
+
+                // 입력창에 텍스트 설정
+                inputMessage.setText(transcribedText);
+
+                // 자동으로 전송
+                sendUserMessage();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "음성 변환 실패: " + error);
+
+                // 오버레이 숨기기
+                listeningOverlay.setVisibility(View.GONE);
+                listeningText.setText("듣고 있습니다");
+                listeningInstruction.setText("화면을 터치하여 메시지 보내기");
+
+                // 에러 메시지 표시
+                Toast.makeText(ChatActivity.this, "음성 인식 실패: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showApiKeyDialog() {
@@ -450,5 +678,20 @@ public class ChatActivity extends BaseActivity {
         super.onPause();
         // 앱이 백그라운드로 갈 때 자동 저장
         saveChatHistory();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_RECORD_AUDIO_STT) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한 승인됨 - 녹음 시작
+                startListening();
+            } else {
+                // 권한 거부됨
+                Toast.makeText(this, "음성 인식을 사용하려면 마이크 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

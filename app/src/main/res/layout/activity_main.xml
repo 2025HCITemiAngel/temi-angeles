@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 상단 오른쪽: 언어 토글 -->
+        <!-- 상단 오른쪽: Wake Word + 언어 토글 -->
         <LinearLayout
             android:id="@+id/lang_container"
             android:layout_width="wrap_content"
@@ -41,6 +41,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Wake Word 토글 버튼 -->
+            <TextView
+                android:id="@+id/btn_wake_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="테미야 ⏻"
+                android:textSize="14sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp"
+                android:background="#1976D2"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/btn_kor"

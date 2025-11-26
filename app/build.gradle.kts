@@ -18,6 +18,21 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // local.properties에서 API 키 읽어오기
+        val properties = java.util.Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.inputStream())
+        }
+        
+        val openaiApiKey = properties.getProperty("OPENAI_API_KEY") ?: "YOUR_API_KEY"
+        val picovoiceAccessKey = properties.getProperty("PICOVOICE_ACCESS_KEY") ?: "YOUR_PICOVOICE_KEY"
+        val adminPin = properties.getProperty("ADMIN_PIN") ?: "1234"
+        
+        buildConfigField("String", "OPENAI_API_KEY", "\"$openaiApiKey\"")
+        buildConfigField("String", "PICOVOICE_ACCESS_KEY", "\"$picovoiceAccessKey\"")
+        buildConfigField("String", "ADMIN_PIN", "\"$adminPin\"")
     }
 
     buildTypes {
@@ -34,6 +49,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    
+    // BuildConfig 생성 활성화
+    buildFeatures {
+        buildConfig = true
     }
 }
 

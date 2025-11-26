@@ -3,6 +3,7 @@ package com.example.temidummyapp;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -32,13 +33,14 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
     private AlertDialog navigatingDialog;
     private String currentDestination;
     private boolean wasDragged = false;
-    private static final String ADMIN_PIN = "1234";
     private View adminPanel; // 포함된 관리자 패널 루트
     private View mapPanel; // 길찾기 맵 패널 루트
     private boolean debugOutline = false;
     private boolean mapBitmapLoaded = false;
     private ImageView character; // 챗봇 아이콘
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 1001;
+    private TextView btnWakeWord; // Wake Word 토글 버튼
+    private boolean isWakeWordEnabled = false; // Wake Word 활성화 상태
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
 
         // 언어 버튼 설정
         setupLanguageButtons();
+        
+        // Wake Word 버튼 설정
+        setupWakeWordButton();
 
         // 텍스트 설정
         TextView title = findViewById(R.id.title);
@@ -233,7 +238,7 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
                 }
                 if ("확인".equals(label)) {
                     String pin = display.getTag() != null ? display.getTag().toString() : "";
-                    if (pin.equals(ADMIN_PIN)) {
+                    if (pin.equals(BuildConfig.ADMIN_PIN)) {
                         dialog.dismiss();
                         showAdminOverlay();
                     } else {
@@ -607,6 +612,76 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
         }
     }
 
+
+    // ===== Wake Word 토글 기능 =====
+    private void setupWakeWordButton() {
+        btnWakeWord = findViewById(R.id.btn_wake_word);
+        if (btnWakeWord == null) return;
+
+        // 초기 상태는 비활성화
+        isWakeWordEnabled = false;
+        updateWakeWordButtonUI();
+
+        btnWakeWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleWakeWord();
+            }
+        });
+    }
+
+    private void toggleWakeWord() {
+        isWakeWordEnabled = !isWakeWordEnabled;
+        updateWakeWordButtonUI();
+
+        if (isWakeWordEnabled) {
+            // Wake Word 활성화
+            startWakeWordService();
+            Toast.makeText(this, "테미야 감지 활성화됨", Toast.LENGTH_SHORT).show();
+        } else {
+            // Wake Word 비활성화
+            stopWakeWordService();
+            Toast.makeText(this, "테미야 감지 비활성화됨", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateWakeWordButtonUI() {
+        if (btnWakeWord == null) return;
+
+        if (isWakeWordEnabled) {
+            // 활성화: 파란색 배경, 흰색 글자
+            btnWakeWord.setBackgroundColor(0xFF1976D2);
+            btnWakeWord.setTextColor(0xFFFFFFFF);
+        } else {
+            // 비활성화: 회색 배경, 짙은 회색 글자 (언어 버튼 비활성 시와 동일)
+            btnWakeWord.setBackgroundColor(0xFFDDE6F5);
+            btnWakeWord.setTextColor(0xFF4A5A6A);
+        }
+    }
+
+    private WakeWordService getWakeWordService() {
+        if (getApplication() instanceof TemiApplication) {
+            TemiApplication app = (TemiApplication) getApplication();
+            return (app != null) ? app.getWakeWordService() : null;
+        }
+        return null;
+    }
+
+    private void startWakeWordService() {
+        WakeWordService service = getWakeWordService();
+        if (service != null && !service.isListening()) {
+            service.startListening();
+            Log.d("MainActivity", "Wake Word 감지 시작");
+        }
+    }
+
+    private void stopWakeWordService() {
+        WakeWordService service = getWakeWordService();
+        if (service != null && service.isListening()) {
+            service.stopListening();
+            Log.d("MainActivity", "Wake Word 감지 중지");
+        }
+    }
 
     // ===== 언어 전환 기능 =====
     private void setupLanguageButtons() {

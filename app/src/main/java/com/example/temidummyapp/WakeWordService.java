@@ -23,10 +23,7 @@ public class WakeWordService {
     private Context context;
     private boolean isListening = false;
 
-    // AccessKey는 실제 Picovoice Console에서 발급받은 키로 교체해야 합니다
-    // TODO: 실제 AccessKey로 교체하세요. Picovoice Console
-    // (https://console.picovoice.ai/)에서 발급받을 수 있습니다.
-    private static final String ACCESS_KEY = "VY3z2DdTVb9HjbyYn9bf097KCibgCLVrP48aFSTuhdrES3pHW2cqyw==";
+    // AccessKey는 BuildConfig에서 가져옴 (local.properties에서 관리)
 
     public WakeWordService(Context context) {
         this.context = context.getApplicationContext();
@@ -49,7 +46,9 @@ public class WakeWordService {
         try {
             Log.i(TAG, "=== Wake Word Service 초기화 시작 ===");
             Log.i(TAG, "Keyword file: " + KEYWORD_FILE);
-            Log.i(TAG, "AccessKey: " + ACCESS_KEY.substring(0, Math.min(10, ACCESS_KEY.length())) + "...");
+
+            String accessKey = BuildConfig.PICOVOICE_ACCESS_KEY;
+            Log.i(TAG, "AccessKey: " + accessKey.substring(0, Math.min(10, accessKey.length())) + "...");
 
             // assets 폴더의 모든 파일 목록 확인 (디버깅용)
             try {
@@ -93,7 +92,7 @@ public class WakeWordService {
 
             Log.i(TAG, "Building PorcupineManager...");
             PorcupineManager.Builder builder = new PorcupineManager.Builder()
-                    .setAccessKey(ACCESS_KEY)
+                    .setAccessKey(accessKey)
                     .setKeywordPaths(new String[] { KEYWORD_FILE })
                     .setSensitivities(new float[] { 0.75f }); // 민감도 높임 (덜 자주 체크)
 
