@@ -12,8 +12,8 @@
     <!-- 상단 왼쪽: 관리자 연결 -->
     <TextView
         android:id="@+id/btn_admin"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/bg_red_dot"
         android:contentDescription="admin"
         android:layout_marginStart="8dp"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/textViewWeMeet"
-            android:layout_width="558dp"
+            android:layout_width="700dp"
             android:layout_height="34dp"
             android:layout_marginStart="44dp"
             android:layout_marginTop="16dp"

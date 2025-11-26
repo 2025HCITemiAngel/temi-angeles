@@ -95,18 +95,20 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
             }
         }
         if (mapPanel != null) {
-            View close = mapPanel.findViewById(R.id.map_close);
-            View back = mapPanel.findViewById(R.id.map_back);
+            View backButton = mapPanel.findViewById(R.id.backButton);
             View mapTitle = mapPanel.findViewById(R.id.map_title);
-            View.OnClickListener hide = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mapPanel.setVisibility(View.GONE);
-                    showCharacterIcon(); // 맵 패널 닫을 때 챗봇 아이콘 다시 표시
-                }
-            };
-            if (close != null) close.setOnClickListener(hide);
-            if (back != null) back.setOnClickListener(hide);
+            
+            // 뒤로가기 버튼 클릭 리스너
+            if (backButton != null) {
+                backButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mapPanel.setVisibility(View.GONE);
+                        showCharacterIcon(); // 맵 패널 닫을 때 챗봇 아이콘 다시 표시
+                    }
+                });
+            }
+            
             if (mapTitle != null) {
                 mapTitle.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -201,6 +203,13 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
     private void showAdminPinDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_admin_pin);
+        
+        // 다이얼로그에서도 전체화면 모드 유지
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, 
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        }
+        
         TextView display = dialog.findViewById(R.id.pin_display);
         // 원본 PIN 입력값은 display의 tag에 보관한다.
         display.setText("");
@@ -249,7 +258,21 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
             View key = dialog.findViewById(id);
             if (key != null) key.setOnClickListener(numClick);
         }
+        
         dialog.show();
+        
+        // 다이얼로그 표시 후 전체화면 모드 적용
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            );
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        }
     }
 
     private void showAdminOverlay() {
@@ -440,14 +463,36 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
             return;
         }
         CharSequence[] items = locations.toArray(new CharSequence[0]);
-        new AlertDialog.Builder(this)
+        AlertDialog locationDialog = new AlertDialog.Builder(this)
                 .setTitle("이동할 위치 선택")
                 .setItems(items, (dialog, which) -> {
                     String target = locations.get(which);
                     startNavigation(target);
                 })
                 .setNegativeButton(android.R.string.cancel, null)
-                .show();
+                .create();
+        
+        locationDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (locationDialog.getWindow() != null) {
+                    View decor = locationDialog.getWindow().getDecorView();
+                    if (decor != null) {
+                        // 전체화면 모드 유지
+                        decor.setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        );
+                    }
+                }
+            }
+        });
+        
+        locationDialog.show();
     }
 
     private void startNavigation(String target) {
@@ -474,6 +519,15 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
                         if (navigatingDialog.getWindow() != null) {
                             View decor = navigatingDialog.getWindow().getDecorView();
                             if (decor != null) {
+                                // 전체화면 모드 유지
+                                decor.setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                );
                                 decor.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {

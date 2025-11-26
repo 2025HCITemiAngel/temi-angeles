@@ -37,22 +37,11 @@ public class DirectionsActivity extends BaseActivity implements OnGoToLocationSt
         mapContainer = findViewById(R.id.map_container);
         mapImage = findViewById(R.id.map_image);
         View mapTitle = findViewById(R.id.map_title);
-        View mapClose = findViewById(R.id.map_close);
-        View mapBack = findViewById(R.id.map_back);
+        View backButton = findViewById(R.id.backButton);
 
-        // 닫기 버튼 클릭 리스너
-        if (mapClose != null) {
-            mapClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
-
-        // 뒤로 가기 버튼 클릭 리스너
-        if (mapBack != null) {
-            mapBack.setOnClickListener(new View.OnClickListener() {
+        // 뒤로가기 버튼 클릭 리스너
+        if (backButton != null) {
+            backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
@@ -219,6 +208,15 @@ public class DirectionsActivity extends BaseActivity implements OnGoToLocationSt
                         if (navigatingDialog.getWindow() != null) {
                             View decor = navigatingDialog.getWindow().getDecorView();
                             if (decor != null) {
+                                // 전체화면 모드 유지
+                                decor.setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                );
                                 decor.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
