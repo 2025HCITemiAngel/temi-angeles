@@ -48,6 +48,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     private int countdownCount = 4;
     private final int totalRepetitions = 4;
     private final ArrayList<String> capturedImagePaths = new ArrayList<>();
+    private String templateName;
 
     private final Handler timeoutHandler = new Handler(Looper.getMainLooper());
     private Runnable captureTimeoutRunnable;
@@ -65,6 +66,11 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phototemi_filming);
+
+        templateName = getIntent().getStringExtra("template");
+        if (templateName == null) {
+            templateName = "Default Template";
+        }
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -184,6 +190,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
             Log.d(TAG, "Finishing filming, starting PictureSelectActivity.");
             Intent intent = new Intent(PhotoTemiFilmingActivity.this, PhotoTemiPictureSelectActivity.class);
             intent.putStringArrayListExtra("captured_images", capturedImagePaths);
+            intent.putExtra("template", templateName);
             startActivity(intent);
             finish();
         }

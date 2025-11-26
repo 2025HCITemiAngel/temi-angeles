@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -45,6 +46,46 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
 
     private static final String TAG = "PhotoTemiResult";
     private static final String UPLOAD_URL = "https://phototemi.kwidea.com/api/upload";
+
+    private static final TemplateFrame[] DEFAULT_TEMPLATE_FRAMES = {
+            new TemplateFrame(0.09f, 0.1150f, 0.82f, 0.3256f),
+            new TemplateFrame(0.09f, 0.4665f, 0.82f, 0.3256f)
+    };
+
+    private static final TemplateFrame[] BLACK_TEMPLATE_FRAMES = {
+            new TemplateFrame(0.0872f, 0.0432f, 0.8256f, 0.3276f),
+            new TemplateFrame(0.0872f, 0.3971f, 0.8256f, 0.3276f)
+    };
+
+    private static final TemplateFrame[] BLUE_TEMPLATE_FRAMES = {
+            new TemplateFrame(0.0872f, 0.0432f, 0.8256f, 0.3276f),
+            new TemplateFrame(0.0872f, 0.3971f, 0.8256f, 0.3276f)
+    };
+
+    private static final TemplateFrame[] DEVELOPER_TEMPLATE_FRAMES = {
+            new TemplateFrame(0.0933f, 0.1062f, 0.82f, 0.3238f),
+            new TemplateFrame(0.0933f, 0.4947f, 0.82f, 0.3238f)
+    };
+
+    private static final TemplateFrame[] BIT8_TEMPLATE_FRAMES = {
+            new TemplateFrame(0.0872f, 0.0432f, 0.8256f, 0.3276f),
+            new TemplateFrame(0.0872f, 0.3971f, 0.8256f, 0.3276f)
+    };
+
+    private static final TemplateFrame[] getTemplateFrames(String templateName) {
+        switch (templateName) {
+            case "Black Template":
+                return BLACK_TEMPLATE_FRAMES;
+            case "Blue Template":
+                return BLUE_TEMPLATE_FRAMES;
+            case "Developer Template":
+                return DEVELOPER_TEMPLATE_FRAMES;
+            case "8bit Template":
+                return BIT8_TEMPLATE_FRAMES;
+            default:
+                return DEFAULT_TEMPLATE_FRAMES;
+        }
+    }
 
     private Bitmap finalImageBitmap;
     private ImageView resultImage;
@@ -71,25 +112,19 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
                 }
 
                 Bitmap templateBitmap = BitmapFactory.decodeResource(getResources(), templateResourceId);
-                Bitmap mutableBitmap = templateBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                Canvas canvas = new Canvas(mutableBitmap);
-
-                final int frameWidth = 250;
-                final int frameHeight = 188;
-                final int frame1_left = 24;
-                final int frame1_top = 68;
-                Rect destRect1 = new Rect(frame1_left, frame1_top, frame1_left + frameWidth, frame1_top + frameHeight);
-                final int frame2_left = 24;
-                final int frame2_top = destRect1.bottom + 10;
-                Rect destRect2 = new Rect(frame2_left, frame2_top, frame2_left + frameWidth, frame2_top + frameHeight);
+                Bitmap resultBitmap = Bitmap.createBitmap(templateBitmap.getWidth(), templateBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(resultBitmap);
 
                 Bitmap photo1 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(selectedImageUris.get(0)));
                 Bitmap photo2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(selectedImageUris.get(1)));
 
-                drawBitmapToCanvas(canvas, photo1, destRect1);
-                drawBitmapToCanvas(canvas, photo2, destRect2);
+                TemplateFrame[] templateFrames = getTemplateFrames(templateName);
+                Rect[] targetRects = buildFrameRects(templateBitmap, templateFrames);
+                ArrayList<Bitmap> photos = new ArrayList<>(Arrays.asList(photo1, photo2));
+                drawPhotosOnTemplate(canvas, photos, targetRects);
+                canvas.drawBitmap(templateBitmap, 0, 0, null);
 
-                finalImageBitmap = mutableBitmap;
+                finalImageBitmap = resultBitmap;
                 resultImage.setImageBitmap(finalImageBitmap);
 
             } catch (IOException e) {
@@ -173,6 +208,42 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
         matrix.setScale(scale, scale);
         matrix.postTranslate((int) (dx + 0.5f) + destination.left, (int) (dy + 0.5f) + destination.top);
         canvas.drawBitmap(bitmap, matrix, null);
+    }
+
+    private Rect[] buildFrameRects(Bitmap templateBitmap, TemplateFrame[] templateFrames) {
+        Rect[] rects = new Rect[templateFrames.length];
+        int bitmapWidth = templateBitmap.getWidth();
+        int bitmapHeight = templateBitmap.getHeight();
+
+        for (int i = 0; i < templateFrames.length; i++) {
+            TemplateFrame frame = templateFrames[i];
+            int left = Math.round(frame.leftRatio * bitmapWidth);
+            int top = Math.round(frame.topRatio * bitmapHeight);
+            int right = Math.round((frame.leftRatio + frame.widthRatio) * bitmapWidth);
+            int bottom = Math.round((frame.topRatio + frame.heightRatio) * bitmapHeight);
+            rects[i] = new Rect(left, top, right, bottom);
+        }
+        return rects;
+    }
+
+    private void drawPhotosOnTemplate(Canvas canvas, ArrayList<Bitmap> photos, Rect[] rects) {
+        for (int i = 0; i < photos.size() && i < rects.length; i++) {
+            drawBitmapToCanvas(canvas, photos.get(i), rects[i]);
+        }
+    }
+
+    private static class TemplateFrame {
+        final float leftRatio;
+        final float topRatio;
+        final float widthRatio;
+        final float heightRatio;
+
+        TemplateFrame(float leftRatio, float topRatio, float widthRatio, float heightRatio) {
+            this.leftRatio = leftRatio;
+            this.topRatio = topRatio;
+            this.widthRatio = widthRatio;
+            this.heightRatio = heightRatio;
+        }
     }
 
     private static OkHttpClient getUnsafeOkHttpClient() {
