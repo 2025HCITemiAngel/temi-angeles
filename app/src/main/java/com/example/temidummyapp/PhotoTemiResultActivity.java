@@ -55,14 +55,22 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phototemi_result);
 
         resultImage = findViewById(R.id.result_image);
-        Button homeButton = findViewById(R.id.home_button);
         Button shareButton = findViewById(R.id.share_button);
 
         ArrayList<String> selectedImageUris = getIntent().getStringArrayListExtra("selected_images");
+        String templateName = getIntent().getStringExtra("template");
 
-        if (selectedImageUris != null && selectedImageUris.size() == 2) {
+        if (selectedImageUris != null && selectedImageUris.size() == 2 && templateName != null) {
             try {
-                Bitmap templateBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.photo_template_black);
+                String resourceName = "photo_template_" + templateName.replace(" Template", "").toLowerCase().replace(" ", "_");
+                int templateResourceId = getResources().getIdentifier(resourceName, "drawable", getPackageName());
+
+                if (templateResourceId == 0) {
+                    Toast.makeText(this, "Template not found: " + templateName, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Bitmap templateBitmap = BitmapFactory.decodeResource(getResources(), templateResourceId);
                 Bitmap mutableBitmap = templateBitmap.copy(Bitmap.Config.ARGB_8888, true);
                 Canvas canvas = new Canvas(mutableBitmap);
 
@@ -86,19 +94,15 @@ public class PhotoTemiResultActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(this, "Error creating final image.", Toast.LENGTH_SHORT).show();
             }
         }
-
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(PhotoTemiResultActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        });
 
         shareButton.setOnClickListener(v -> {
             if (finalImageBitmap != null) {
                 uploadImage(finalImageBitmap);
+            } else {
+                Toast.makeText(PhotoTemiResultActivity.this, "No image to share.", Toast.LENGTH_SHORT).show();
             }
         });
     }
