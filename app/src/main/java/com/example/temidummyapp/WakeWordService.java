@@ -13,36 +13,37 @@ import ai.picovoice.porcupine.PorcupineManagerCallback;
 
 public class WakeWordService {
     private static final String TAG = "WakeWordService";
-    private static final String KEYWORD_FILE = "테미야안녕_ko_android_v3_0_0.ppn";
+    private static final String KEYWORD_FILE = "테미야_ko_android_v3_0_0.ppn";
     // 한국어 모델 파일 - Porcupine GitHub에서 다운로드 필요
     // 다운로드: https://github.com/Picovoice/porcupine/tree/master/lib/common
     // 파일명: porcupine_params_ko.pv
     private static final String MODEL_FILE = "porcupine_params_ko.pv";
-    
+
     private PorcupineManager porcupineManager;
     private Context context;
     private boolean isListening = false;
-    
+
     // AccessKey는 실제 Picovoice Console에서 발급받은 키로 교체해야 합니다
-    // TODO: 실제 AccessKey로 교체하세요. Picovoice Console (https://console.picovoice.ai/)에서 발급받을 수 있습니다.
-    private static final String ACCESS_KEY = "VO54Vp97/81vAL8ZiaWGi0idMIdthF3X2DRw/FLKwpIbgCwjLAkjQw==";
-    
+    // TODO: 실제 AccessKey로 교체하세요. Picovoice Console
+    // (https://console.picovoice.ai/)에서 발급받을 수 있습니다.
+    private static final String ACCESS_KEY = "VY3z2DdTVb9HjbyYn9bf097KCibgCLVrP48aFSTuhdrES3pHW2cqyw==";
+
     public WakeWordService(Context context) {
         this.context = context.getApplicationContext();
     }
-    
+
     public void startListening() {
         if (isListening) {
             Log.w(TAG, "Wake word detection is already running");
             showToast("Wake Word 감지가 이미 실행 중입니다.");
             return;
         }
-        
+
         try {
             Log.i(TAG, "=== Wake Word Service 초기화 시작 ===");
             Log.i(TAG, "Keyword file: " + KEYWORD_FILE);
             Log.i(TAG, "AccessKey: " + ACCESS_KEY.substring(0, Math.min(10, ACCESS_KEY.length())) + "...");
-            
+
             // assets 폴더의 모든 파일 목록 확인 (디버깅용)
             try {
                 String[] assetFiles = context.getAssets().list("");
@@ -55,7 +56,7 @@ public class WakeWordService {
             } catch (Exception e) {
                 Log.w(TAG, "Could not list assets: " + e.getMessage());
             }
-            
+
             // assets 폴더에 파일이 있는지 확인
             boolean fileFound = false;
             try {
@@ -68,13 +69,13 @@ public class WakeWordService {
                 Log.e(TAG, "   Error: " + e.getMessage());
                 Log.e(TAG, "   Please ensure the file is in: app/src/main/assets/");
                 Log.e(TAG, "   File must be copied to assets folder and project must be rebuilt");
-                
+
                 // 파일을 찾을 수 없으면 초기화 중단
                 isListening = false;
                 showToast("❌ 키워드 파일을 찾을 수 없습니다: " + KEYWORD_FILE);
                 return;
             }
-            
+
             PorcupineManagerCallback callback = new PorcupineManagerCallback() {
                 @Override
                 public void invoke(int keywordIndex) {
@@ -82,12 +83,12 @@ public class WakeWordService {
                     onWakeWordDetected();
                 }
             };
-            
+
             Log.i(TAG, "Building PorcupineManager...");
             PorcupineManager.Builder builder = new PorcupineManager.Builder()
                     .setAccessKey(ACCESS_KEY)
-                    .setKeywordPaths(new String[]{KEYWORD_FILE});
-            
+                    .setKeywordPaths(new String[] { KEYWORD_FILE });
+
             // 한국어 모델 파일이 있는 경우 사용
             try {
                 java.io.InputStream testStream = context.getAssets().open(MODEL_FILE);
@@ -101,16 +102,16 @@ public class WakeWordService {
                 Log.w(TAG, "   Place it in: app/src/main/assets/");
                 Log.w(TAG, "   Continuing without model file (may not work for Korean keywords)");
             }
-            
+
             porcupineManager = builder.build(context, callback);
-            
+
             Log.i(TAG, "Starting PorcupineManager...");
             porcupineManager.start();
             isListening = true;
             Log.i(TAG, "✅ Wake word detection started successfully!");
-            Log.i(TAG, "📢 Now listening for: '테미야안녕'");
-            showToast("🎤 '테미야안녕' 감지 시작됨");
-            
+            Log.i(TAG, "📢 Now listening for: '테미야'");
+            showToast("🎤 '테미야' 감지 시작됨");
+
         } catch (PorcupineException e) {
             Log.e(TAG, "❌ Failed to initialize Porcupine: " + e.getMessage(), e);
             Log.e(TAG, "   Error details: " + e.toString());
@@ -123,7 +124,7 @@ public class WakeWordService {
             showToast("❌ 오류 발생: " + e.getMessage());
         }
     }
-    
+
     public void stopListening() {
         if (porcupineManager != null) {
             try {
@@ -139,20 +140,20 @@ public class WakeWordService {
             }
         }
     }
-    
+
     private void onWakeWordDetected() {
-        Log.i(TAG, "🎯 Wake word '테미야안녕' detected! Moving to ChatActivity...");
+        Log.i(TAG, "🎯 Wake word '테미야' detected! Moving to ChatActivity...");
         Log.i(TAG, "   Current context: " + context.getClass().getSimpleName());
-        
+
         // UI 스레드에서 Toast 표시 및 Activity 이동
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 try {
                     // 감지 성공 메시지 표시
-                    Toast.makeText(context, "✅ '테미야안녕' 감지됨! 챗봇으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "✅ '테미야' 감지됨! 챗봇으로 이동합니다.", Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "   Toast shown, starting ChatActivity...");
-                    
+
                     // ChatActivity로 이동 (어떤 Activity에서든 작동하도록 FLAG 설정)
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -165,7 +166,7 @@ public class WakeWordService {
             }
         });
     }
-    
+
     private void showToast(String message) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -174,13 +175,12 @@ public class WakeWordService {
             }
         });
     }
-    
+
     public boolean isListening() {
         return isListening;
     }
-    
+
     public void release() {
         stopListening();
     }
 }
-
