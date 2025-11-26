@@ -1,25 +1,342 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:background="#FFFFFFFF"
     tools:context=".DirectionsActivity">
 
-    <Button
-        android:id="@+id/btn_get_map"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/map_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="지도 가져오기" />
+        android:text="이동하고 싶은 부스를 클릭해보세요!"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#243B5A"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/tv_map_locations"
+        android:id="@+id/map_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="저장된 위치가 여기에 표시됩니다."
-        android:textSize="18sp" />
+        android:text="닫기"
+        android:textColor="#1A7DFF"
+        android:textSize="16sp"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/map_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@null"
+            tools:src="@drawable/map"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- 투명 버튼 21개 (위치는 디자인 탭에서 조정) -->
+
+        <Button
+            android:id="@+id/btn_01"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="211dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="240dp"
+            android:layout_marginTop="536dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="01" />
+
+        <Button
+            android:id="@+id/btn_02"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="192dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="544dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="02" />
+
+        <Button
+            android:id="@+id/btn_03"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="191dp"
+            android:layout_height="119dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="392dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="03" />
+
+        <Button
+            android:id="@+id/btn_04"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="207dp"
+            android:layout_height="112dp"
+            android:layout_marginStart="228dp"
+            android:layout_marginTop="392dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="04" />
+
+        <Button
+            android:id="@+id/btn_05"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="185dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="228dp"
+            android:layout_marginTop="272dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="05" />
+
+        <Button
+            android:id="@+id/btn_06"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="188dp"
+            android:layout_height="91dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="280dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="06" />
+
+        <Button
+            android:id="@+id/btn_07"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="279dp"
+            android:layout_height="111dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="140dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="07" />
+
+        <Button
+            android:id="@+id/btn_08"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="209dp"
+            android:layout_height="121dp"
+            android:layout_marginStart="576dp"
+            android:layout_marginTop="544dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="08" />
+
+        <Button
+            android:id="@+id/btn_09"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="196dp"
+            android:layout_height="127dp"
+            android:layout_marginStart="800dp"
+            android:layout_marginTop="544dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="09" />
+
+        <Button
+            android:id="@+id/btn_10"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="207dp"
+            android:layout_height="111dp"
+            android:layout_marginStart="788dp"
+            android:layout_marginTop="404dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="10" />
+
+        <Button
+            android:id="@+id/btn_11"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="222dp"
+            android:layout_height="112dp"
+            android:layout_marginStart="556dp"
+            android:layout_marginTop="404dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="11" />
+
+        <Button
+            android:id="@+id/btn_12"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="217dp"
+            android:layout_height="124dp"
+            android:layout_marginStart="556dp"
+            android:layout_marginTop="272dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="12" />
+
+        <Button
+            android:id="@+id/btn_13"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="201dp"
+            android:layout_height="119dp"
+            android:layout_marginStart="788dp"
+            android:layout_marginTop="276dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="13" />
+
+        <Button
+            android:id="@+id/btn_14"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="261dp"
+            android:layout_height="111dp"
+            android:layout_marginStart="724dp"
+            android:layout_marginTop="140dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="14" />
+
+        <Button
+            android:id="@+id/btn_15"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="255dp"
+            android:layout_height="109dp"
+            android:layout_marginStart="1000dp"
+            android:layout_marginTop="140dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="15" />
+
+        <Button
+            android:id="@+id/btn_16"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="204dp"
+            android:layout_height="107dp"
+            android:layout_marginStart="1056dp"
+            android:layout_marginTop="284dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="16" />
+
+        <Button
+            android:id="@+id/btn_17"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="202dp"
+            android:layout_height="114dp"
+            android:layout_marginStart="1056dp"
+            android:layout_marginTop="404dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="17" />
+
+        <Button
+            android:id="@+id/btn_18"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="197dp"
+            android:layout_height="132dp"
+            android:layout_marginStart="1056dp"
+            android:layout_marginTop="552dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="18" />
+
+        <Button
+            android:id="@+id/btn_19"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="125dp"
+            android:layout_height="104dp"
+            android:layout_marginStart="448dp"
+            android:layout_marginTop="608dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="19" />
+
+        <Button
+            android:id="@+id/btn_20"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="137dp"
+            android:layout_height="251dp"
+            android:layout_marginStart="416dp"
+            android:layout_marginTop="104dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="20" />
+
+        <Button
+            android:id="@+id/btn_21"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="72dp"
+            android:layout_height="82dp"
+            android:layout_marginStart="988dp"
+            android:layout_marginTop="644dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/map_image"
+            app:layout_constraintTop_toTopOf="@id/map_image"
+            tools:background="#66FF5252"
+            tools:text="21" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/map_back"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:text="뒤로 가기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

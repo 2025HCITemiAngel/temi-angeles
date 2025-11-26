@@ -139,7 +139,8 @@ public class MainActivity extends AppCompatActivity implements OnGoToLocationSta
         cardNavi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMapPanel();
+                Intent intent = new Intent(MainActivity.this, DirectionsActivity.class);
+                startActivity(intent);
             }
         });
 
