@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.view.WindowManager;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 101;
     private static final String TAG = "PhotoTemiFilming";
     private static final long CAPTURE_TIMEOUT = 10000; // 10 seconds timeout
+    private static final long INITIAL_DELAY_MS = 5000;
 
     private PreviewView previewView;
     private TextView countdownText;
@@ -48,9 +50,11 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     private int countdownCount = 4;
     private final int totalRepetitions = 4;
     private final ArrayList<String> capturedImagePaths = new ArrayList<>();
+    private String templateName;
 
     private final Handler timeoutHandler = new Handler(Looper.getMainLooper());
     private Runnable captureTimeoutRunnable;
+    private CountDownTimer initialDelayTimer;
 
     private static final String[] REQUIRED_PERMISSIONS;
     static {
@@ -65,6 +69,11 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phototemi_filming);
+
+        templateName = getIntent().getStringExtra("template");
+        if (templateName == null) {
+            templateName = "Default Template";
+        }
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -111,7 +120,7 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
                     return;
                 }
 
-                startNextCountdown();
+                startInitialDelay();
 
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, "startCamera() - CameraProvider 가져오기 실패.", e);
@@ -184,14 +193,31 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
             Log.d(TAG, "Finishing filming, starting PictureSelectActivity.");
             Intent intent = new Intent(PhotoTemiFilmingActivity.this, PhotoTemiPictureSelectActivity.class);
             intent.putStringArrayListExtra("captured_images", capturedImagePaths);
+            intent.putExtra("template", templateName);
             startActivity(intent);
             finish();
         }
     }
 
+    private void startInitialDelay() {
+        countdownText.setVisibility(View.INVISIBLE);
+        initialDelayTimer = new CountDownTimer(INITIAL_DELAY_MS, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                initialDelayTimer = null;
+                countdownText.setVisibility(View.VISIBLE);
+                startNextCountdown();
+            }
+        }.start();
+    }
+
     private void startNextCountdown() {
         repetitionText.setText(String.format(Locale.getDefault(), "%d/%d", totalRepetitions - countdownCount + 1, totalRepetitions));
-        new CountDownTimer(5000, 1000) {
+        new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 countdownText.setText(String.valueOf(millisUntilFinished / 1000));
             }
@@ -229,6 +255,10 @@ public class PhotoTemiFilmingActivity extends AppCompatActivity {
         super.onPause();
         if (captureTimeoutRunnable != null) {
             timeoutHandler.removeCallbacks(captureTimeoutRunnable);
+        }
+        if (initialDelayTimer != null) {
+            initialDelayTimer.cancel();
+            initialDelayTimer = null;
         }
     }
 }

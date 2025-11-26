@@ -11,7 +11,7 @@
         android:id="@+id/filming_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="손바닥을 보여주세요!"
+        android:text="Temi가 사진을 찍을게요!"
         android:textSize="36sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
@@ -20,7 +20,7 @@
         android:id="@+id/filming_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="그러면 Temi가 사진을 찍을게요!"
+        android:text="멋진 포즈를 취해주세요."
         android:textSize="24sp"
         android:layout_marginBottom="16dp"/>
 

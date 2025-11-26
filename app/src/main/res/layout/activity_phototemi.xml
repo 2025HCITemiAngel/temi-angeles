@@ -41,51 +41,111 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="240dp"
-                    android:layout_height="500dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Default Template"
-                    android:src="@drawable/photo_template_default" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:id="@+id/template_default"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:contentDescription="Default Template"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/photo_template_default" />
+                    <View
+                        android:id="@+id/template_default_border"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:background="@drawable/blue_border"
+                        android:visibility="gone" />
+                </FrameLayout>
 
-                <ImageView
-                    android:layout_width="240dp"
-                    android:layout_height="500dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Black Template"
-                    android:src="@drawable/photo_template_black" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:id="@+id/template_black"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:contentDescription="Black Template"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/photo_template_black" />
+                    <View
+                        android:id="@+id/template_black_border"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:background="@drawable/blue_border"
+                        android:visibility="gone" />
+                </FrameLayout>
 
-                <ImageView
-                    android:layout_width="240dp"
-                    android:layout_height="500dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Coshow Template"
-                    android:src="@drawable/photo_template_coshow" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:id="@+id/template_blue"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:contentDescription="Blue Template"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/photo_template_blue" />
+                    <View
+                        android:id="@+id/template_blue_border"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:background="@drawable/blue_border"
+                        android:visibility="gone" />
+                </FrameLayout>
 
-                <ImageView
-                    android:layout_width="240dp"
-                    android:layout_height="500dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Developer Template"
-                    android:src="@drawable/photo_template_developer" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:id="@+id/template_developer"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:contentDescription="Developer Template"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/photo_template_developer" />
+                    <View
+                        android:id="@+id/template_developer_border"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:background="@drawable/blue_border"
+                        android:visibility="gone" />
+                </FrameLayout>
 
-                <ImageView
-                    android:layout_width="240dp"
-                    android:layout_height="500dp"
-                    android:contentDescription="Picnic Template"
-                    android:src="@drawable/photo_template_picnic" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/template_8bit"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:contentDescription="8bit Template"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/photo_template_8bit" />
+                    <View
+                        android:id="@+id/template_8bit_border"
+                        android:layout_width="240dp"
+                        android:layout_height="500dp"
+                        android:background="@drawable/blue_border"
+                        android:visibility="gone" />
+                </FrameLayout>
 
             </LinearLayout>
         </HorizontalScrollView>
 
         <Button
             android:id="@+id/action_button"
-            android:layout_width="240dp"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#0a0a0a"
             android:text="시작하기"
             android:textColor="#ffffff"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
 
     </LinearLayout>
 

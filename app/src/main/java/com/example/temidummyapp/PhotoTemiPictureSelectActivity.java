@@ -28,6 +28,7 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
     private ArrayList<String> imageUris;
     private ImageAdapter adapter;
     private Button doneButton;
+    private String templateName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
         doneButton = findViewById(R.id.done_button);
 
         imageUris = getIntent().getStringArrayListExtra("captured_images");
+        templateName = getIntent().getStringExtra("template");
 
         if (imageUris != null) {
             adapter = new ImageAdapter(this, imageUris);
@@ -55,6 +57,7 @@ public class PhotoTemiPictureSelectActivity extends AppCompatActivity {
         doneButton.setOnClickListener(v -> {
             Intent intent = new Intent(PhotoTemiPictureSelectActivity.this, PhotoTemiResultActivity.class);
             intent.putStringArrayListExtra("selected_images", adapter.getSelectedItems());
+            intent.putExtra("template", templateName);
             startActivity(intent);
         });
     }

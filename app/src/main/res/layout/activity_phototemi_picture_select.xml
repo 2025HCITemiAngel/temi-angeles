@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="마음에 드는 사진을 두 장 골라보세요"
-        android:textSize="24sp"
+        android:textSize="36sp"
         android:textStyle="bold" />
 
     <GridView
@@ -34,9 +34,13 @@
 
         <Button
             android:id="@+id/done_button"
-            android:layout_width="wrap_content"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:text="사진 보러 가기" />
+            android:text="사진 보러 가기"
+            android:textSize="36sp"
+            android:backgroundTint="#0a0a0a"
+            android:textColor="#ffffff"
+            />
     </LinearLayout>
 
 </LinearLayout>

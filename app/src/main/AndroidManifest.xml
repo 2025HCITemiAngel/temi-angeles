@@ -68,6 +68,11 @@
             android:exported="false"
             android:screenOrientation="landscape" />
 
+        <activity
+            android:name=".PhotoTemiQrCodeActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+
         <!-- ✅ 메뉴 추천 Activity 등록 -->
         <activity
             android:name=".MenuActivity"
