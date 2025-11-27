@@ -1,71 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_voice_chat_gradient"
     android:fitsSystemWindows="true">
 
-    <!-- 닫기 버튼 (상단 우측) -->
+    <!-- 메인 콘텐츠 (3개 구역) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 1️⃣ 동그라미 컨테이너 (화면의 1/3) -->
+        <FrameLayout
+            android:id="@+id/circle_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.example.temidummyapp.AnimatedCircleView
+                android:id="@+id/animated_circle"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <!-- 2️⃣ 상태 컨테이너 (화면의 1/3) -->
+        <FrameLayout
+            android:id="@+id/status_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp">
+
+            <TextView
+                android:id="@+id/instruction_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="테미 행사에 대해서 물어보세요"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:maxLines="3"
+                android:ellipsize="end"/>
+
+        </FrameLayout>
+
+        <!-- 3️⃣ 프롬프터 컨테이너 (화면의 1/3) -->
+        <FrameLayout
+            android:id="@+id/prompter_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/conversation_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:overScrollMode="never"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- 플로팅 닫기 버튼 (우측 상단) -->
     <ImageButton
         android:id="@+id/btn_close"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|end"
         android:layout_margin="24dp"
         android:background="@drawable/bg_circle_white"
         android:src="@drawable/ic_arrow_back"
         android:contentDescription="닫기"
-        android:padding="12dp"
+        android:padding="14dp"
         android:scaleType="fitCenter"
-        android:alpha="0.8"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:elevation="8dp"
+        android:alpha="0.9"/>
 
-    <!-- 중앙 애니메이션 원 -->
-    <com.example.temidummyapp.AnimatedCircleView
-        android:id="@+id/animated_circle"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- 대화 내역 리스트 (동그라미 아래, 중앙 정렬, 고정 높이) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/conversation_list"
-        android:layout_width="0dp"
-        android:layout_height="280dp"
-        android:clipToPadding="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:overScrollMode="never"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/animated_circle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- 안내 문구 (하단) -->
-    <TextView
-        android:id="@+id/instruction_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="테미 행사에 대해서 물어보세요"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:layout_marginBottom="40dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 
