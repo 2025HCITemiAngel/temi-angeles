@@ -2,6 +2,7 @@ package com.example.temidummyapp;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,8 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
     private TextView statusText;
     private TextView guideText;
     private View progressBar;
+    private ImageView backgroundImage;
+    private View backgroundOverlay;
     private String destination;
     private boolean hasArrived = false;
     
@@ -41,12 +44,17 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
         statusText = findViewById(R.id.status_text);
         guideText = findViewById(R.id.guide_text);
         progressBar = findViewById(R.id.progress_bar);
+        backgroundImage = findViewById(R.id.background_image);
+        backgroundOverlay = findViewById(R.id.background_overlay);
         
         if (destination != null) {
             statusText.setText("'" + destination + "' 으로 이동 중입니다");
         } else {
             statusText.setText("이동 안내 중입니다");
         }
+        
+        // 이동 시작 시 배경 이미지 표시
+        showNavigatingBackground();
         
         // 화면 터치 시 이전 페이지로 돌아가기
         View rootView = findViewById(R.id.root_layout);
@@ -84,6 +92,9 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
                 guideText.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 
+                // 도착 시 배경 이미지 숨기기
+                hideNavigatingBackground();
+                
                 // Toast로만 도착 알림 (잠깐 표시되었다 사라짐)
                 Toast.makeText(this, "도착했습니다: " + location, Toast.LENGTH_SHORT).show();
                 
@@ -97,6 +108,8 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
                     statusText.setText("장애물을 피하고 있습니다...");
                 } else if (s.contains("abort") || s.contains("cancel")) {
                     statusText.setText("이동이 중단되었습니다");
+                    // 중단 시 배경 이미지 숨기기
+                    hideNavigatingBackground();
                 } else if (s.contains("calculate")) {
                     statusText.setText("경로를 계산하고 있습니다...");
                 } else if (s.contains("going") || s.contains("start")) {
@@ -109,6 +122,9 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
                         guideText.setVisibility(View.VISIBLE);
                         guideText.setText("잠시만 길을 내어주세요\n(화면을 터치하면 이전 화면으로 돌아갑니다)");
                         progressBar.setVisibility(View.VISIBLE);
+                        
+                        // 재이동 시 배경 이미지 다시 표시
+                        showNavigatingBackground();
                     }
                     
                     if (destination != null) {
@@ -118,6 +134,34 @@ public class NavigatingActivity extends AppCompatActivity implements OnGoToLocat
                     }
                 }
             });
+        }
+    }
+    
+    /**
+     * 이동 중 배경 이미지를 표시합니다.
+     * 이 메서드에서 원하는 이미지 리소스를 설정하세요.
+     */
+    private void showNavigatingBackground() {
+        if (backgroundImage != null) {
+            // TODO: 원하는 이미지 리소스로 변경하세요
+            // 예시: backgroundImage.setImageResource(R.drawable.your_navigation_background);
+            backgroundImage.setImageResource(R.drawable.ic_temi_menu);
+            backgroundImage.setVisibility(View.VISIBLE);
+        }
+        if (backgroundOverlay != null) {
+            backgroundOverlay.setVisibility(View.VISIBLE);
+        }
+    }
+    
+    /**
+     * 이동 중 배경 이미지를 숨깁니다.
+     */
+    private void hideNavigatingBackground() {
+        if (backgroundImage != null) {
+            backgroundImage.setVisibility(View.GONE);
+        }
+        if (backgroundOverlay != null) {
+            backgroundOverlay.setVisibility(View.GONE);
         }
     }
     
