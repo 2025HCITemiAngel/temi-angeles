@@ -141,24 +141,24 @@ public class EventQRActivity extends BaseActivity {
         event1.setDescription("웨이팅 없이 먹을 수 있다!");
         event1.setDisclaimer("* 선착순 소진 시 조기 종료될 수 있습니다.");
         event1.setImageResId(R.drawable.ic_event_pizza);
-        event1.setIntroTitle("🍕 코아이의 깜짝 선물! 이재모피자 웨이팅 없이 먹자!");
-        event1.setIntro1("CO-SHOW에 와준 여러분께 감사한 마음을 담아");
-        event1.setIntro2("부산에서 유명한 이재모피자를 준비했어요!");
-        event1.setHighlight("✨ 웨이팅 없이 바로 먹는 이재모피자, 코쇼에서만 가능!");
-        event1.setNote1("모~두에게 드리고 싶지만, 준비된 수량 소진 시 조기 마감될 수 있어요💛");
-        event1.setNote2("그래도 최대한 많은 친구들이 먹을 수 있도록 코아이가 열심히 준비했대요!");
-        event1.setDate("언제? 11/27(목) ~ 11/28(금) 11:00 ~ 17:00");
-        event1.setLocation("어디서? CO-SHOW 전시장 내 출구 방향");
-        event1.setParticipationTitle("참여방법 (3가지 중 1개만 하면 OK!)");
-        event1.setMethod1("1. 코아이 인형탈을 찾아 코아이와 예쁘게 사진 찍고 인증하기");
-        event1.setMethod2("2. 전시장에서 사진 찍고 SNS 업로드 인증");
-        event1.setMethod2Detail1("→ CO-SHOW 전시를 배경으로 사진 촬영");
-        event1.setMethod2Detail2("→ 인스타/SNS 업로드 시");
-        event1.setMethod2Detail3("→ #COSHOW #COSS #첨단분야혁신융합대학 3개 해시태그 필수!");
-        event1.setMethod3("3. 수험생 인증");
-        event1.setMethod3Detail("→ 수험표 or 수험생임을 확인할 수 있는 내용 인증하기");
-        event1.setReward("🍕 인증 완료하면, 맛있는 이재모 조각 피자 바로 드려요!");
-        event1.setClosing("CO-SHOW에서 즐기고, 먹고, 추억까지 챙겨가세요💛");
+        event1.setContent("🍕 코아이의 깜짝 선물! 이재모피자 웨이팅 없이 먹자!\n" +
+                "CO-SHOW에 와준 여러분께 감사한 마음을 담아\n" +
+                "부산에서 유명한 이재모피자를 준비했어요!\n\n" +
+                "✨ 웨이팅 없이 바로 먹는 이재모피자, 코쇼에서만 가능!\n" +
+                "모~두에게 드리고 싶지만, 준비된 수량 소진 시 조기 마감될 수 있어요💛\n" +
+                "그래도 최대한 많은 친구들이 먹을 수 있도록 코아이가 열심히 준비했대요!\n\n" +
+                "📍 언제? 11/27(목) ~ 11/28(금) 11:00 ~ 17:00\n" +
+                "📍 어디서? CO-SHOW 전시장 내 출구 방향\n\n" +
+                "✔ 참여방법 (3가지 중 1개만 하면 OK!)\n\n" +
+                "1. 코아이 인형탈을 찾아 코아이와 예쁘게 사진 찍고 인증하기\n\n" +
+                "2. 전시장에서 사진 찍고 SNS 업로드 인증\n" +
+                "→ CO-SHOW 전시를 배경으로 사진 촬영\n" +
+                "→ 인스타/SNS 업로드 시\n" +
+                "#COSHOW #COSS #첨단분야혁신융합대학 3개 해시태그 필수!\n\n" +
+                "3. 수험생 인증\n" +
+                "→ 수험표 or 수험생임을 확인할 수 있는 내용 인증하기\n\n" +
+                "🍕 인증 완료하면, 맛있는 이재모 조각 피자 바로 드려요!\n" +
+                "CO-SHOW에서 즐기고, 먹고, 추억까지 챙겨가세요💛");
         eventList.add(event1);
 
         // 이벤트 2: 수험생 이벤트
@@ -168,23 +168,26 @@ public class EventQRActivity extends BaseActivity {
         event2.setDescription("수험표 인증만 해도 도장 2개!");
         event2.setDisclaimer("※ 선착순 1일 1,000명");
         event2.setImageResId(R.drawable.ic_event_highschool);
-        event2.setIntroTitle("📣 수험표 들고 CO-SHOW로 출발!");
-        event2.setIntro1("수고했어요, 수험생 여러분 💪");
-        event2.setIntro2("이제는 즐길 시간이에요 ✨");
-        event2.setHighlight("CO-SHOW 현장에서 수험표 인증하면\n🎁 도장 2개 즉시 지급!\n스탬프투어 참여하고 푸짐한 경품까지 GET! 🎉");
-        event2.setDate("기간: 2025.11.26(수) ~ 11.29(토) 상시 운영");
-        event2.setLocation("위치: 전시장 내 이벤트 부스");
-        event2.setParticipationTitle("💡 참여 방법");
-        event2.setMethod1("1. 등록데스크에서 CO-SHOW 리플렛 수령");
-        event2.setMethod2("2. 전시장 내 이벤트 운영부스에서 수험표 인증 후 도장 2개 받기");
-        event2.setMethod3("3. 다양한 프로그램 즐기고 도장도 받고");
-        event2.setMethod4("4. 모든 도장을 획득했다면 이벤트 부스에서 경품 뽑기!");
-        event2.setMethod2Detail1("");
-        event2.setMethod2Detail2("");
-        event2.setMethod2Detail3("");
-        event2.setMethod3Detail("✨ 참여 꿀TIP!\n수험표는 반드시 실물로 지참해주세요.\n현장 운영부스 방문 시 인증 필수!\n도장은 CO-SHOW 기간 내 상시 운영됩니다.");
-        event2.setReward("💡 스페셜 경품 : 갤럭시 워치6, 갤럭시 버즈3 프로, 키크론 V10 Pro Max 키보드, 키크론 B6 Pro 저슴 블루투스 키보드, COSS-BALL 키링");
-        event2.setClosing("");
+        event2.setContent("📣 수험표 들고 CO-SHOW로 출발!\n" +
+                "수고했어요, 수험생 여러분 💪\n" +
+                "이제는 즐길 시간이에요 ✨\n\n" +
+                "CO-SHOW 현장에서 수험표 인증하면\n" +
+                "🎁 도장 2개 즉시 지급!\n" +
+                "스탬프투어 참여하고 푸짐한 경품까지 GET! 🎉\n\n" +
+                "💡 참여 방법\n" +
+                "1. 등록데스크에서 CO-SHOW 리플렛 수령\n" +
+                "2. 전시장 내 이벤트 운영부스에서 수험표 인증 후 도장 2개 받기\n" +
+                "3. 다양한 프로그램 즐기고 도장도 받고\n" +
+                "4.  모든 도장을 획득했다면 이벤트 부스에서 경품 뽑기!\n\n" +
+                "📍 위치: 전시장 내 이벤트 부스\n" +
+                "🗓️ 기간: 2025.11.26(수) ~ 11.29(토) 상시 운영\n" +
+                "※ 선착순 1일 1,000명\n\n" +
+                "✨ 참여 꿀TIP!\n" +
+                "수험표는 반드시 실물로 지참해주세요.\n" +
+                "현장 운영부스 방문 시 인증 필수!\n" +
+                "도장은 CO-SHOW 기간 내 상시 운영됩니다.\n\n" +
+                "💡 스페셜 경품 : 갤럭시 워치6, 갤럭시 버즈3 프로, 키크론 V10 Pro Max " +
+                "키보드, 키크론 B6 Pro 저슴 블루투스 키보드, COSS-BALL 키링");
         eventList.add(event2);
 
         // ViewPager2 어댑터 설정

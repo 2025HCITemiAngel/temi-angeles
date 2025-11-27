@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="100dp"
+    android:layout_marginEnd="100dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="#FFFFFF">
@@ -14,13 +17,12 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <!-- 왼쪽: 빨간 배경 + 이미지 -->
+        <!-- 왼쪽: 이미지 -->
         <LinearLayout
-            android:id="@+id/leftRedSection"
+            android:id="@+id/leftImageSection"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#FF4444"
             android:orientation="vertical"
             android:gravity="center"
             android:padding="20dp">
@@ -49,227 +51,13 @@
                 android:padding="20dp">
 
                 <TextView
-                    android:id="@+id/eventIntroTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="코아이의 깜짝 선물! 이재모피자 웨이팅 없이 먹자!"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:id="@+id/eventIntro1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CO-SHOW에 와준 여러분께 감사한 마음을 담아"
-                    android:textSize="16sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/eventIntro2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="부산에서 유명한 이재모피자를 준비했어요!"
-                    android:textSize="16sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:id="@+id/eventHighlight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✨ 웨이팅 없이 바로 먹는 이재모피자, 코쇼에서만 가능!"
-                    android:textSize="16sp"
-                    android:textColor="#FF6B35"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/eventNote1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="모~두에게 드리고 싶지만, 준비된 수량 소진 시 조기 마감될 수 있어요♡♡♡"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/eventNote2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="그래도 최대한 많은 친구들이 먹을 수 있도록 코아이가 열심히 준비했대요!"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="20dp" />
-
-                <LinearLayout
+                    android:id="@+id/eventContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📍"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/eventDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="언제? 11/27(목) ~ 11/28(금) 11:00 ~ 17:00"
-                        android:textSize="16sp"
-                        android:textColor="#000000"
-                        android:layout_marginStart="8dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📍"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/eventLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="어디서? CO-SHOW 전시장 내 출구 방향"
-                        android:textSize="16sp"
-                        android:textColor="#000000"
-                        android:layout_marginStart="8dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="✓"
-                        android:textSize="20sp"
-                        android:textColor="#4CAF50" />
-
-                    <TextView
-                        android:id="@+id/eventParticipationTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="참여방법 (3가지 중 1개만 하면 OK!)"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#000000"
-                        android:layout_marginStart="8dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/eventMethod1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1. 코아이 인형탈을 찾아 코아이와 예쁘게 사진 찍고 인증하기"
+                    android:text=""
                     android:textSize="15sp"
                     android:textColor="#333333"
-                    android:layout_marginBottom="4dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2. 전시장에서 사진 찍고 SNS 업로드 인증"
-                    android:textSize="15sp"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="4dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod2Detail1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="   → CO-SHOW 전시를 배경으로 사진 촬영"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="4dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod2Detail2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="   → 인스타/SNS 업로드 시"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="4dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod2Detail3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="   → #COSHOW #COSS #첨단분야혁신융합대학 3개 해시태그 필수!"
-                    android:textSize="14sp"
-                    android:textColor="#FF6B35"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3. 수험생 인증"
-                    android:textSize="15sp"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="4dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod3Detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="   → 수험표 or 수험생임을 확인할 수 있는 내용 인증하기"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="12dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventMethod4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4. 모든 도장을 획득했다면 이벤트 부스에서 경품 뽑기!"
-                    android:textSize="15sp"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="12dp"
-                    android:paddingStart="24dp" />
-
-                <TextView
-                    android:id="@+id/eventReward"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="인증 완료하면, 맛있는 이재모 조각 피자 바로 드려요!"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#FF6B35"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/eventClosing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CO-SHOW에서 즐기고, 먹고, 추억까지 챙겨가세요♡"
-                    android:textSize="15sp"
-                    android:textColor="#666666" />
+                    android:lineSpacingExtra="4dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

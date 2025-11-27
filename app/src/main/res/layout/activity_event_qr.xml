@@ -492,27 +492,31 @@
             <!-- 왼쪽 화살표 버튼 -->
             <ImageButton
                 android:id="@+id/btnEventPrev"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_main_backward"
+                android:background="@drawable/bg_circle_white"
+                android:foreground="@null"
+                android:src="@drawable/ic_event_backward"
+                android:scaleX="-1"
                 android:contentDescription="이전 이벤트"
+                android:scaleType="centerInside"
+                android:padding="18dp"
                 android:visibility="gone" />
 
             <!-- 오른쪽 화살표 버튼 -->
             <ImageButton
                 android:id="@+id/btnEventNext"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_main_backward"
-                android:scaleX="-1"
+                android:background="@drawable/bg_circle_white"
+                android:foreground="@null"
+                android:src="@drawable/ic_event_backward"
+                android:scaleType="centerInside"
+                android:padding="18dp"
                 android:contentDescription="다음 이벤트" />
 
         </RelativeLayout>

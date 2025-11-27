@@ -25,6 +25,7 @@ public class EventData {
     private String method4;
     private String reward;
     private String closing;
+    private String content;
 
     public EventData() {
     }
@@ -101,5 +102,8 @@ public class EventData {
 
     public String getClosing() { return closing; }
     public void setClosing(String closing) { this.closing = closing; }
+
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 }
 
