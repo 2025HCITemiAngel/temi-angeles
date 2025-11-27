@@ -552,10 +552,14 @@ public class ChatActivity extends BaseActivity {
 
             @Override
             public void onTextComplete(String fullText) {
-                Log.d(TAG, "실시간 텍스트 완성: " + fullText);
-                // 최종 텍스트로 업데이트
-                if (!fullText.isEmpty()) {
-                    inputMessage.setText(fullText);
+                Log.d(TAG, "실시간 텍스트 완성 (한 문장 끝): " + fullText);
+                // VAD가 침묵을 감지하여 한 문장이 끝났지만,
+                // 계속 말할 수 있으므로 누적된 버퍼는 유지
+                // 공백 추가하여 다음 문장과 구분
+                if (!fullText.isEmpty() && realtimeTextBuffer.length() > 0) {
+                    realtimeTextBuffer.append(" ");
+                    inputMessage.setText(realtimeTextBuffer.toString());
+                    inputMessage.setSelection(inputMessage.getText().length());
                 }
             }
 
