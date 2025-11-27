@@ -321,7 +321,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 뒤로가기 버튼 (맨 위 레이어) -->
+    <!-- 뒤로가기 버튼 -->
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="58dp"
@@ -335,6 +335,25 @@
         android:elevation="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 하단 중앙 안내 문구 (맨 위 레이어) -->
+    <TextView
+        android:id="@+id/tv_touch_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안내 받고 싶은 장소를 터치하세요"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#243B5A"
+        android:background="@drawable/bg_touch_guide"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:elevation="32dp"
+        android:translationZ="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
