@@ -1,5 +1,7 @@
 package com.example.temidummyapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,7 +13,6 @@ import com.robotemi.sdk.Robot;
 import com.robotemi.sdk.TtsRequest;
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener;
 import com.robotemi.sdk.listeners.OnRobotDragStateChangedListener;
-import android.content.DialogInterface;
 
 public class DirectionsActivity extends BaseActivity implements OnGoToLocationStatusChangedListener, OnRobotDragStateChangedListener {
 
