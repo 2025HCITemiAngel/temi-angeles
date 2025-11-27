@@ -1,5 +1,15 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
+}
+
+// local.properties에서 API 키 읽어오기
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 
 android {
@@ -19,16 +29,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        // local.properties에서 API 키 읽어오기
-        val properties = java.util.Properties()
-        val localPropertiesFile = rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            properties.load(localPropertiesFile.inputStream())
-        }
-        
-        val openaiApiKey = properties.getProperty("OPENAI_API_KEY") ?: "YOUR_API_KEY"
-        val picovoiceAccessKey = properties.getProperty("PICOVOICE_ACCESS_KEY") ?: "YOUR_PICOVOICE_KEY"
-        val adminPin = properties.getProperty("ADMIN_PIN") ?: "1234"
+        // BuildConfig 필드 추가
+        val openaiApiKey = localProperties.getProperty("OPENAI_API_KEY") ?: "YOUR_API_KEY"
+        val picovoiceAccessKey = localProperties.getProperty("PICOVOICE_ACCESS_KEY") ?: "YOUR_PICOVOICE_KEY"
+        val adminPin = localProperties.getProperty("ADMIN_PIN") ?: "1234"
         
         buildConfigField("String", "OPENAI_API_KEY", "\"$openaiApiKey\"")
         buildConfigField("String", "PICOVOICE_ACCESS_KEY", "\"$picovoiceAccessKey\"")
