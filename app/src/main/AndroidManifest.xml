@@ -120,6 +120,13 @@
             android:exported="false"
             android:screenOrientation="landscape" />
 
+        <!-- ✅ 이동 중 얼굴 화면 Activity 등록 -->
+        <activity
+            android:name=".NavigatingActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
         <!-- ✅ Temi Skill 등록 (이 부분 추가) -->
         <meta-data
             android:name="com.robotemi.sdk.metadata.SKILL"

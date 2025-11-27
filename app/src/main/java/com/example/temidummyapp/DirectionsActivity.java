@@ -186,11 +186,21 @@ public class DirectionsActivity extends BaseActivity implements OnGoToLocationSt
 
     private void startNavigation(String target) {
         currentDestination = target;
-        showNavigatingDialog();
+        // 기존 다이얼로그 대신 NavigatingActivity로 이동
+        startNavigatingActivity(target);
         // 화면 안내 멘트 + 음성 안내
         TtsRequest tts = TtsRequest.create(getString(R.string.navigation_guiding), false);
         robot.speak(tts);
         robot.goTo(target);
+    }
+    
+    /**
+     * NavigatingActivity 시작 (이동 중 얼굴 화면)
+     */
+    private void startNavigatingActivity(String destination) {
+        Intent intent = new Intent(DirectionsActivity.this, NavigatingActivity.class);
+        intent.putExtra("destination", destination);
+        startActivity(intent);
     }
 
     private void showNavigatingDialog() {
@@ -245,21 +255,13 @@ public class DirectionsActivity extends BaseActivity implements OnGoToLocationSt
     // 내비 상태 콜백
     @Override
     public void onGoToLocationStatusChanged(String location, String status, int descriptionId, String description) {
+        // NavigatingActivity가 자체적으로 상태를 처리하므로
+        // DirectionsActivity에서는 도착 시에만 현재 목적지 초기화
         String s = status == null ? "" : status.toLowerCase();
-        if (s.contains("start") || s.contains("going") || s.contains("calculate")) {
-            showNavigatingDialog();
-        } else if (s.contains("arrived") || s.contains("complete")) {
-            dismissNavigatingDialog();
+        if (s.contains("arrived") || s.contains("complete")) {
             if (currentDestination != null && currentDestination.equals(location)) {
                 currentDestination = null;
             }
-            runOnUiThread(() ->
-                    Toast.makeText(DirectionsActivity.this, getString(R.string.navigation_arrived, location), Toast.LENGTH_SHORT).show()
-            );
-        } else if (s.contains("abort") || s.contains("cancel")) {
-            showNavigatingDialog();
-        } else if (s.contains("obstacle")) {
-            showNavigatingDialog();
         }
     }
 
@@ -269,9 +271,9 @@ public class DirectionsActivity extends BaseActivity implements OnGoToLocationSt
         boolean wasDraggedBefore = wasDragged;
         wasDragged = isDragged;
         if (wasDraggedBefore && !isDragged && currentDestination != null) {
-            // 재시도
+            // 재시도 - NavigatingActivity로 다시 이동
             runOnUiThread(() -> {
-                showNavigatingDialog();
+                startNavigatingActivity(currentDestination);
                 TtsRequest tts = TtsRequest.create(getString(R.string.navigation_restart), false);
                 robot.speak(tts);
                 robot.goTo(currentDestination);
