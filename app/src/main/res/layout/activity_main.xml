@@ -47,7 +47,7 @@
                 android:id="@+id/btn_wake_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="테미야 ⏻"
+                android:text="@string/wake_word_button"
                 android:textSize="14sp"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
@@ -121,7 +121,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이렇게 말해보세요. 헤이 테미, 부스로 안내해줘."
+            android:text="@string/temi_title"
             android:textColor="#111111"
             android:textSize="22sp"
             android:textStyle="bold" />

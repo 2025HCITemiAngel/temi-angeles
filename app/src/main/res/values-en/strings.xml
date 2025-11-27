@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TemiDummyApp</string>
-    <string name="temi_title">Say "Temi Ya" to start a conversation with Temi</string>
+    <string name="temi_title">Say \"Temi Ya\" to start a conversation with Temi</string>
+    <string name="wake_word_button">Temi Ya ●</string>
 
     <string name="menu_back_button">Back</string>
     <string name="menu_title">Menu Recommendation</string>

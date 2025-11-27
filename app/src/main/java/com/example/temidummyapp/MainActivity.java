@@ -656,12 +656,15 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
     private void updateWakeWordButtonUI() {
         if (btnWakeWord == null) return;
 
+        // 현재 언어에 맞는 텍스트 사용
+        btnWakeWord.setText(R.string.wake_word_button);
+
         if (isWakeWordEnabled) {
             // 활성화: 파란색 배경, 흰색 글자
             btnWakeWord.setBackgroundColor(0xFF1976D2);
             btnWakeWord.setTextColor(0xFFFFFFFF);
         } else {
-            // 비활성화: 회색 배경, 짙은 회색 글자 (언어 버튼 비활성 시와 동일)
+            // 비활성화: 회색 배경, 짙은 회색 글자
             btnWakeWord.setBackgroundColor(0xFFDDE6F5);
             btnWakeWord.setTextColor(0xFF4A5A6A);
         }
@@ -823,6 +826,11 @@ public class MainActivity extends BaseActivity implements OnGoToLocationStatusCh
         TextView title = findViewById(R.id.title);
         if (title != null) {
             title.setText(R.string.temi_title);
+        }
+
+        // Wake Word 버튼 텍스트 업데이트
+        if (btnWakeWord != null) {
+            btnWakeWord.setText(R.string.wake_word_button);
         }
 
         // we-meet 텍스트 업데이트

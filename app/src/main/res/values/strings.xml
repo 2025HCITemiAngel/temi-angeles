@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TemiDummyApp</string>
-    <string name="temi_title">테미와 대화를 나누고 싶다면 "테미야" 라고 해보세요</string>
+    <string name="temi_title">테미와 대화를 나누고 싶으면 \"테미야\"라고 해보세요</string>
+    <string name="wake_word_button">테미야 ●</string>
 
     <string name="menu_back_button">뒤로가기</string>
     <string name="menu_title">메뉴 추천</string>
