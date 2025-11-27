@@ -33,25 +33,22 @@ public class OpenAIService {
     private final Handler mainHandler;
     private String apiKey;
 
-    // RAG: 행사장 정보 시스템 프롬프트
-    private static final String SYSTEM_PROMPT = "당신은 2025 CO-SHOW 행사 안내 도우미입니다. 방문객에게 친절하고 정확하게 정보를 제공해야 합니다.\n\n" +
-            "=== 행사 정보 ===\n" +
+    // ========== RAG 공통 데이터 (CHATBOT & AUDIO 공유) ==========
+
+    /**
+     * 행사 기본 정보
+     */
+    private static final String EVENT_INFO = "=== 행사 정보 ===\n" +
             "행사명: 2025 CO-SHOW (코쇼)\n" +
             "일정: 2025년 11월 26일(수) ~ 11월 29일(토), 4일간\n" +
             "장소: 부산 BEXCO 제1전시장 2홀, 3A홀\n" +
             "대상: 초·중·고등학생, 대학생, 전 국민 누구나\n" +
-            "입장료: 무료\n\n" +
-            "=== 안내 규칙 ===\n" +
-            "- 아래 표와 제공된 행사 정보만 사용해 안내합니다.\n" +
-            "- 사용자가 처음 질문하면 바로 프로그램을 나열하지 않고,\n" +
-            "  어떤 활동을 원하는지·누구와 왔는지·흥미 있는 분야 등을 1~2가지 자연스럽게 확인합니다.\n" +
-            "- 대화를 2~3턴 진행하며 연령(stage), 관심 분야(tags), 체험 시간(time_max), 희망 분위기 등을 파악합니다.\n" +
-            "- 조건에 맞는 프로그램을 최대 3개 추천하고 짧은 이유를 함께 안내합니다.\n" +
-            "- 추측하거나 만들어내지 않고, 정보가 없으면 모른다고 답합니다.\n" +
-            "- 사용자가 한국어로 질문하면 한국어로, 영어로 질문하면 영어로 답변합니다.\n" +
-            "- 이벤트 관련 문의가 들어오면 제공된 이벤트 정보를 기반으로 정확하게 안내합니다.\n" +
-            "- 항상 친절하고 부드럽고 간결하게 응답합니다.\n\n" +
-            "=== 프로그램 데이터 형식 ===\n" +
+            "입장료: 무료\n\n";
+
+    /**
+     * 프로그램 목록 (55개 프로그램)
+     */
+    private static final String PROGRAM_LIST = "=== 프로그램 데이터 형식 ===\n" +
             "booth_no\tstage\ttags\ttitle\tintroduction\ttime_max\tmethod\n\n" +
             "=== 프로그램 목록 ===\n" +
             "B04\t중학생 이상\t인공지능\tAICOSS 캠퍼스 탐구생활\tAI 전공-특화 교과목(20-20)을 메타버스 캠퍼스에서 페험하고 숨겨진 미션을 해결하고 보상받자!\t10분\t현장접수\n" +
@@ -96,9 +93,9 @@ public class OpenAIService {
             "B05\t중학생 이상\t지능형 로봇\t휴머노이드 이론교육 및 미션수행\t4족보행로봇의 원리를 학습하고 트랙 운행을 통해 로봇의 움직임을 직접 체험하는 프로그램\t90분\t사전접수\n" +
             "A07\t초등학생 고학년 이상\t실감 미디어\t꿈의 학교 속으로! 메타버스 캠퍼스 & 콘텐츠 여행\t실감 미디어 메타버스 플랫폼을 활용한 대학 캠퍼스 투어 및 우수작품 쇼케이스\t10분\t현장접수\n"
             +
-            "A07\t초등학생 고학년 이상\t실감 미디어\t“디지털숲 영상 오디세이”\t가상현실로 구현된 숲 숲속 기상 변화 등을 배경으로 시각과 청각을 활용해 정신과 신체의 이완을 돕는 명상 프로그램\t30분\t사전접수\n"
+            "A07\t초등학생 고학년 이상\t실감 미디어\t디지털숲 영상 오디세이\t가상현실로 구현된 숲 숲속 기상 변화 등을 배경으로 시각과 청각을 활용해 정신과 신체의 이완을 돕는 명상 프로그램\t30분\t사전접수\n"
             +
-            "A07\t초등학생 고학년 이상\t실감 미디어\t“진짜처럼 짜릿! 햅틱 손맛 체험존”(VR 기반의 햅틱 디바이스 체험)\t햅틱 디바이스(슈트와 장갑)를 착용한 후 복싱과 롤러코스터 체험\t10분\t현장접수\n"
+            "A07\t초등학생 고학년 이상\t실감 미디어\t진짜처럼 짜릿! 햅틱 손맛 체험존(VR 기반의 햅틱 디바이스 체험)\t햅틱 디바이스(슈트와 장갑)를 착용한 후 복싱과 롤러코스터 체험\t10분\t현장접수\n"
             +
             "A07\t초등학생 고학년 이상\t실감 미디어\t톡톡 튀는 콘텐츠! 실감 팡팡 체험존\t실감미디어 학생들의 독창성 있는 우수 작품들을 직접 체험\t10분\t현장접수\n" +
             "B08\t초등학생 고학년 이상\t미래 자동차\tAWS DeepRacer 자율주행 체험\t자율주행 AI VS 인간 운전 대결 승자는?!\t10분\t현장접수 / 사전접수\n" +
@@ -123,18 +120,19 @@ public class OpenAIService {
             "A03\t초등학생 이상\t빅데이터\t나는 누구일까?\t빅데이터가 랜덤키워드 5개를 줄게 정답은 누가 맞출래?\t5~10분\t현장접수\n" +
             "A03\t초등학생 이상\t빅데이터\t나의 왕자님, 공주님을 찾아라!\t이상형과 관련된 단어만 알려줘! AI가 이상형을 그려줄게!\t5~10분\t현장접수\n" +
             "A03\t초등학생 이상\t빅데이터\t너 내 동료가 되라!\t데이터분석? 시각화? 빅데이터 전공이 궁금하면 따라와! 전공체험 해보자\t5분\t현장접수\n" +
-            "A03\t초등학생 이상\t빅데이터\t빅데이터 어워즈\t챗봇과 함께하는 빅데이터 컨소시엄 학생들이 만든 우수 성과 체험\t5분\t현장접수\n\n\n" +
-            "=== CO-SHOW 이벤트 안내 ===\n\n" +
+            "A03\t초등학생 이상\t빅데이터\t빅데이터 어워즈\t챗봇과 함께하는 빅데이터 컨소시엄 학생들이 만든 우수 성과 체험\t5분\t현장접수\n\n\n";
 
+    /**
+     * 이벤트 상세 정보
+     */
+    private static final String EVENT_DETAILS = "=== CO-SHOW 이벤트 안내 ===\n\n" +
             "=== 1) 수험생 특별 이벤트 ===\n" +
             "이벤트명: 2025 CO-SHOW 수험생 이벤트\n" +
             "대상: 수험표 지참 수험생\n" +
             "혜택: 도장 2개 즉시 지급 및 모든 도장 획득시 경품 뽑기 진행\n" +
             "조건: CO-SHOW 방문 당일 실물 수험표 소지 필수, 모든 도장 획득 필요\n\n" +
-
             "운영 기간: 2025년 11월 26일(수) ~ 11월 29일(토) 상시 운영\n" +
             "참여 위치: 전시장 내 이벤트 운영부스 (등록데스크 리플렛 수령 후 진행)\n\n" +
-
             "참여 방법:\n" +
             "1) 등록데스크에서 CO-SHOW 리플렛 수령\n" +
             "2) 이벤트 운영부스에서 수험표 인증 및 도장 2개 지급\n" +
@@ -142,45 +140,36 @@ public class OpenAIService {
             "4) 도장 완성 후 스탬프 용지 제출\n" +
             "5) 경품 뽑기 진행 (랜덤)\n" +
             "※ 1인 1회 참여 가능\n\n" +
-
             "스페셜 경품:\n" +
             "- 갤럭시 워치 8\n" +
             "- 갤럭시 버즈 3 프로\n" +
             "- 키크론 V10 Pro Max 키보드\n" +
             "- 키크론 B6 Pro 저소음 블루투스 키보드\n" +
             "- COSS-BALL 키링\n\n" +
-
             "유의 사항:\n" +
             "- 수험표는 반드시 실물 지참\n" +
             "- 현장 방문 인증 필수\n" +
             "- 도장은 행사 기간 내 상시 운영\n\n" +
-
             "홍보 문구 예시:\n" +
             "수험표 들고 CO-SHOW로 출발!\n" +
             "수능 끝! 이제 SHOW 보러 가자!\n" +
             "스탬프투어 참여하고 선물까지 GET!\n\n" +
-
             "=== 2) CO-SHOW 스탬프투어 이벤트 ===\n" +
             "이벤트명: 2025 CO-SHOW 스탬프투어 이벤트\n" +
             "설명: 전시장 체험 프로그램 참여 후 스탬프를 8개 이상 모아 경품에 참여하는 프로그램\n\n" +
-
             "운영 기간: 2025년 11월 26일(수) ~ 11월 29일(토) 상시 운영\n" +
             "참여 제한: 1일 선착순 1,000명 / 1인 1회 참여 가능\n\n" +
-
             "참여 위치:\n" +
             "- 전시장 내 스탬프 투어 이벤트 부스\n" +
             "- 부산 BEXCO 메인무대 앞\n\n" +
-
             "참여 방법:\n" +
             "1) 등록데스크에서 리플렛 수령\n" +
             "2) 원하는 프로그램 참여 후 스탬프 획득\n" +
             "3) 스탬프 8개 이상 모으면 이벤트 부스 방문\n" +
             "4) 리플렛 제출 후 경품 뽑기 진행\n\n" +
-
             "수험생 추가 혜택:\n" +
             "- 수험표 인증 시 스탬프 2개 즉시 지급\n" +
             "- 현장 운영부스 방문 필수\n\n" +
-
             "경품 라인업:\n" +
             "- 갤럭시 워치 8\n" +
             "- 갤럭시 버즈 프로 3\n" +
@@ -189,15 +178,52 @@ public class OpenAIService {
             "- 키크론 V10 MAX\n" +
             "- 키크론 B6\n" +
             "- COSS-BALL 키링\n\n" +
-
             "홍보 문구 예시:\n" +
             "CO-SHOW 즐기고 스탬프 찍고 선물까지 받자!\n" +
             "스탬프 8개 모으면 경품 쏟아진다!\n" +
             "놓치면 아쉬운 선착순 1,000명 이벤트!\n\n" +
-
             "관련 해시태그:\n" +
             "#코쇼 #2025코쇼 #COSHOW #2025COSHOW #COSS사업 #2025COSS\n" +
             "#첨단교육 #스탬프투어 #수험생이벤트 #부산 #BEXCO\n";
+
+    // ========== 챗봇용 시스템 프롬프트 (텍스트 대화) ==========
+
+    /**
+     * 텍스트 챗봇용 시스템 프롬프트 (상세한 버전)
+     */
+    private static final String CHATBOT_SYSTEM_PROMPT = "당신은 2025 CO-SHOW 행사 안내 도우미입니다. 방문객에게 친절하고 정확하게 정보를 제공해야 합니다.\n\n"
+            +
+            EVENT_INFO +
+            "=== 안내 규칙 ===\n" +
+            "- 아래 표와 제공된 행사 정보만 사용해 안내합니다.\n" +
+            "- 사용자가 처음 질문하면 바로 프로그램을 나열하지 않고,\n" +
+            "  어떤 활동을 원하는지·누구와 왔는지·흥미 있는 분야 등을 1~2가지 자연스럽게 확인합니다.\n" +
+            "- 대화를 2~3턴 진행하며 연령(stage), 관심 분야(tags), 체험 시간(time_max), 희망 분위기 등을 파악합니다.\n" +
+            "- 조건에 맞는 프로그램을 최대 3개 추천하고 짧은 이유를 함께 안내합니다.\n" +
+            "- 추측하거나 만들어내지 않고, 정보가 없으면 모른다고 답합니다.\n" +
+            "- 사용자가 한국어로 질문하면 한국어로, 영어로 질문하면 영어로 답변합니다.\n" +
+            "- 이벤트 관련 문의가 들어오면 제공된 이벤트 정보를 기반으로 정확하게 안내합니다.\n" +
+            "- 항상 친절하고 부드럽고 간결하게 응답합니다.\n\n" +
+            PROGRAM_LIST +
+            EVENT_DETAILS;
+
+    // ========== 음성 대화용 시스템 프롬프트 (간결한 버전) ==========
+
+    /**
+     * 음성 대화용 시스템 프롬프트 (간결한 버전)
+     */
+    private static final String AUDIO_SYSTEM_PROMPT = "당신은 2025 CO-SHOW 행사 안내 도우미입니다. 음성 대화이므로 매우 짧고 간결하게 답변해야 합니다.\n\n"
+            +
+            EVENT_INFO +
+            "=== 응답 규칙 (매우 중요!) ===\n" +
+            "1. **최대 2-3문장 이내**로 답변합니다.\n" +
+            "2. 핵심 정보만 간결하게 전달합니다.\n" +
+            "3. 불필요한 인사말, 부연설명, 장황한 문장을 절대 사용하지 않습니다.\n" +
+            "4. 프로그램 추천 시 최대 2개만 간단히 소개합니다.\n" +
+            "5. \"~입니다\", \"~하세요\" 등 짧고 명확하게 끝맺습니다.\n" +
+            "6. 추측하거나 만들어내지 않고, 정보가 없으면 \"해당 정보는 없습니다\"라고만 답합니다.\n\n" +
+            PROGRAM_LIST +
+            EVENT_DETAILS;
 
     public interface ChatCallback {
         void onSuccess(String response);
@@ -365,16 +391,16 @@ public class OpenAIService {
     private JsonObject buildRequestBody(List<ChatMessage> messages, boolean stream) {
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty("model", "gpt-4o-mini"); // 비용 효율적인 모델
-        requestBody.addProperty("temperature", 0.7);
-        requestBody.addProperty("max_tokens", 500);
+        requestBody.addProperty("temperature", 0.7); // 챗봇은 친절하게 (0.7)
+        requestBody.addProperty("max_tokens", 500); // 텍스트 챗봇은 상세하게
         requestBody.addProperty("stream", stream); // 스트리밍 여부
 
         JsonArray messagesArray = new JsonArray();
 
-        // 시스템 프롬프트 추가 (RAG)
+        // 시스템 프롬프트 추가 (RAG - 챗봇용)
         JsonObject systemMessage = new JsonObject();
         systemMessage.addProperty("role", "system");
-        systemMessage.addProperty("content", SYSTEM_PROMPT);
+        systemMessage.addProperty("content", CHATBOT_SYSTEM_PROMPT);
         messagesArray.add(systemMessage);
 
         // 대화 기록 추가
@@ -430,9 +456,24 @@ public class OpenAIService {
     }
 
     /**
-     * 시스템 프롬프트 가져오기 (테스트/디버깅용)
+     * 챗봇용 시스템 프롬프트 가져오기 (텍스트 대화)
      */
+    public String getChatbotSystemPrompt() {
+        return CHATBOT_SYSTEM_PROMPT;
+    }
+
+    /**
+     * 음성 대화용 시스템 프롬프트 가져오기 (간결한 버전)
+     */
+    public String getAudioSystemPrompt() {
+        return AUDIO_SYSTEM_PROMPT;
+    }
+
+    /**
+     * @deprecated 호환성 유지용. getChatbotSystemPrompt() 또는 getAudioSystemPrompt() 사용 권장
+     */
+    @Deprecated
     public String getSystemPrompt() {
-        return SYSTEM_PROMPT;
+        return CHATBOT_SYSTEM_PROMPT;
     }
 }

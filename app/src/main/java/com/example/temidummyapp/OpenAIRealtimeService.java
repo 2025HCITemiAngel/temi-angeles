@@ -138,8 +138,8 @@ public class OpenAIRealtimeService {
      * 세션 설정 전송 (RAG 시스템 프롬프트 포함)
      */
     private void sendSessionUpdate() {
-        // OpenAIService의 SYSTEM_PROMPT 재사용
-        String systemPrompt = getSystemPrompt();
+        // OpenAIService의 AUDIO_SYSTEM_PROMPT 사용 (음성 대화용 간결한 버전)
+        String systemPrompt = getAudioSystemPrompt();
 
         JsonObject sessionUpdate = new JsonObject();
         sessionUpdate.addProperty("type", "session.update");
@@ -169,15 +169,10 @@ public class OpenAIRealtimeService {
         inputAudioTranscription.addProperty("model", "whisper-1");
         session.add("input_audio_transcription", inputAudioTranscription);
 
-        // VAD (Voice Activity Detection) 설정
-        // threshold를 높여서 확실한 음성만 감지 (0.5 → 0.8)
-        // silence_duration을 늘려서 사용자가 말할 시간 확보 (500ms → 2000ms)
-        JsonObject turnDetection = new JsonObject();
-        turnDetection.addProperty("type", "server_vad");
-        turnDetection.addProperty("threshold", 0.8); // 높은 민감도 (0.5 → 0.8)
-        turnDetection.addProperty("prefix_padding_ms", 500); // 발화 시작 전 패딩 증가
-        turnDetection.addProperty("silence_duration_ms", 2000); // 2초 침묵 후 턴 종료 (500ms → 2000ms)
-        session.add("turn_detection", turnDetection);
+        // VAD (Voice Activity Detection) 비활성화
+        // AI가 사용자의 말을 끝까지 듣고 기다리도록 설정
+        // null로 설정하면 AI가 절대 먼저 말하지 않고 사용자가 말할 때까지 기다림
+        session.add("turn_detection", null);
 
         sessionUpdate.add("session", session);
 
@@ -187,12 +182,12 @@ public class OpenAIRealtimeService {
     }
 
     /**
-     * OpenAIService의 SYSTEM_PROMPT 가져오기
+     * OpenAIService의 AUDIO_SYSTEM_PROMPT 가져오기 (음성 대화용)
      */
-    private String getSystemPrompt() {
-        // OpenAIService 인스턴스를 통해 가져오기
+    private String getAudioSystemPrompt() {
+        // OpenAIService 인스턴스를 통해 음성 대화용 프롬프트 가져오기
         OpenAIService openAIService = new OpenAIService();
-        return openAIService.getSystemPrompt();
+        return openAIService.getAudioSystemPrompt();
     }
 
     /**
@@ -400,6 +395,9 @@ public class OpenAIRealtimeService {
             try {
                 Log.d(TAG, "AudioTrack 중지 시작");
                 
+                // 즉시 볼륨 0으로 설정 (무음)
+                audioTrack.setStereoVolume(0.0f, 0.0f);
+                
                 // 재생 중인 오디오 즉시 플러시
                 audioTrack.pause();
                 audioTrack.flush();
@@ -491,6 +489,22 @@ public class OpenAIRealtimeService {
         if (isMicrophonePaused && isStreaming) {
             isMicrophonePaused = false;
             Log.d(TAG, "🎤 마이크 재개 (사용자 입력 대기)");
+        }
+    }
+
+    /**
+     * 오디오 출력 즉시 음소거 (나가기 버튼 등)
+     */
+    public void muteAudioImmediately() {
+        if (audioTrack != null) {
+            try {
+                Log.d(TAG, "🔇 오디오 출력 즉시 음소거");
+                audioTrack.setStereoVolume(0.0f, 0.0f); // 볼륨 0
+                audioTrack.pause(); // 일시 정지
+                audioTrack.flush(); // 버퍼 비우기
+            } catch (Exception e) {
+                Log.e(TAG, "오디오 음소거 오류", e);
+            }
         }
     }
 }

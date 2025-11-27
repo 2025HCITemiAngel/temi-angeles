@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * OpenAI Realtime API를 활용한 실시간 음성 대화 Activity
@@ -21,9 +23,15 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
     private AnimatedCircleView animatedCircle;
     private TextView instructionText;
     private ImageButton btnClose;
+    private RecyclerView conversationList;
+    private VoiceChatAdapter conversationAdapter;
     private OpenAIRealtimeService realtimeService;
     private boolean isConnected = false;
     private boolean isRecording = false;
+    
+    // 현재 활성 메시지 추적
+    private VoiceChatMessage currentUserMessage = null;
+    private VoiceChatMessage currentAIMessage = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +67,16 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
         animatedCircle = findViewById(R.id.animated_circle);
         instructionText = findViewById(R.id.instruction_text);
         btnClose = findViewById(R.id.btn_close);
+        conversationList = findViewById(R.id.conversation_list);
+
+        // 대화 리스트 설정
+        androidx.recyclerview.widget.LinearLayoutManager layoutManager = 
+            new androidx.recyclerview.widget.LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(false); // 위에서 아래로
+        conversationList.setLayoutManager(layoutManager);
+        
+        conversationAdapter = new VoiceChatAdapter();
+        conversationList.setAdapter(conversationAdapter);
 
         btnClose.setOnClickListener(v -> {
             // 버튼 비활성화 (중복 클릭 방지)
@@ -98,7 +116,20 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
             public void onTranscriptReceived(String transcript) {
                 Log.d(TAG, "사용자 음성: " + transcript);
                 runOnUiThread(() -> {
-                    instructionText.setText("사용자: " + transcript);
+                    // 사용자 메시지 추가 또는 업데이트
+                    if (currentUserMessage == null) {
+                        currentUserMessage = new VoiceChatMessage(transcript, VoiceChatMessage.TYPE_USER);
+                        currentUserMessage.setActive(true);
+                        conversationAdapter.addMessage(currentUserMessage);
+                    } else {
+                        currentUserMessage.setMessage(transcript);
+                        conversationAdapter.updateLastMessage(transcript);
+                    }
+                    
+                    // 현재 메시지를 중앙으로 스크롤
+                    scrollToCenter(conversationAdapter.getMessageCount() - 1);
+                    
+                    instructionText.setText("듣고 있습니다...");
                 });
             }
 
@@ -110,6 +141,17 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
                 realtimeService.pauseMicrophone();
                 
                 runOnUiThread(() -> {
+                    // 사용자 메시지 비활성화
+                    if (currentUserMessage != null) {
+                        conversationAdapter.clearActiveMessage();
+                        currentUserMessage = null;
+                    }
+                    
+                    // 새 AI 메시지 시작
+                    currentAIMessage = new VoiceChatMessage("", VoiceChatMessage.TYPE_AI);
+                    currentAIMessage.setActive(true);
+                    conversationAdapter.addMessage(currentAIMessage);
+                    
                     instructionText.setText("AI가 응답하고 있습니다...");
                     animatedCircle.setSpeakingMode();
                 });
@@ -117,9 +159,17 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
 
             @Override
             public void onResponseReceived(String response) {
-                Log.d(TAG, "AI 응답: " + response);
+                Log.d(TAG, "AI 응답 델타: " + response);
                 runOnUiThread(() -> {
-                    instructionText.setText("AI: " + response);
+                    // AI 메시지 실시간 업데이트
+                    if (currentAIMessage != null) {
+                        String currentText = currentAIMessage.getMessage();
+                        currentAIMessage.setMessage(currentText + response);
+                        conversationAdapter.updateLastMessage(currentAIMessage.getMessage());
+                        
+                        // 현재 메시지를 중앙으로 스크롤
+                        scrollToCenter(conversationAdapter.getMessageCount() - 1);
+                    }
                 });
             }
 
@@ -131,6 +181,12 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
                 realtimeService.resumeMicrophone();
                 
                 runOnUiThread(() -> {
+                    // AI 메시지 비활성화
+                    if (currentAIMessage != null) {
+                        conversationAdapter.clearActiveMessage();
+                        currentAIMessage = null;
+                    }
+                    
                     animatedCircle.setListeningMode();
                     instructionText.setText("말씀해주세요");
                 });
@@ -193,6 +249,10 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
         new Thread(() -> {
             try {
                 Log.d(TAG, "=== 음성 대화 종료 시작 ===");
+
+                // 🔇 0단계: AI 음성 출력 즉시 음소거 (말하는 중이어도 즉시 무음)
+                realtimeService.muteAudioImmediately();
+                Log.d(TAG, "0단계: 오디오 출력 즉시 음소거 완료");
 
                 // 1단계: 오디오 스트리밍 중지 (녹음 및 재생)
                 if (isRecording || isConnected) {
@@ -263,6 +323,29 @@ public class RealtimeVoiceChatActivity extends BaseActivity {
             realtimeService.stopAudioStreaming();
             isRecording = false;
         }
+    }
+
+    /**
+     * 특정 메시지를 화면 중앙으로 스크롤
+     */
+    private void scrollToCenter(int position) {
+        if (position < 0 || position >= conversationAdapter.getMessageCount()) {
+            return;
+        }
+
+        conversationList.post(() -> {
+            androidx.recyclerview.widget.LinearLayoutManager layoutManager = 
+                (androidx.recyclerview.widget.LinearLayoutManager) conversationList.getLayoutManager();
+            
+            if (layoutManager != null) {
+                // RecyclerView 높이의 중앙 위치 계산
+                int listHeight = conversationList.getHeight();
+                int centerOffset = listHeight / 2;
+                
+                // 해당 위치로 스크롤 (중앙 정렬)
+                layoutManager.scrollToPositionWithOffset(position, centerOffset);
+            }
+        });
     }
 
     @Override
