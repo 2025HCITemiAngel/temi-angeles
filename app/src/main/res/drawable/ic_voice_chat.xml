@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 음성 파형 아이콘 - 5개의 세로 막대 -->
+    
+    <!-- 왼쪽 첫번째 막대 (짧음) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M4,10 L6,10 L6,14 L4,14 Z"/>
+    
+    <!-- 왼쪽 두번째 막대 (중간) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M8,8 L10,8 L10,16 L8,16 Z"/>
+    
+    <!-- 중앙 막대 (가장 김) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,5 L13,5 L13,19 L11,19 Z"/>
+    
+    <!-- 오른쪽 두번째 막대 (중간) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,8 L16,8 L16,16 L14,16 Z"/>
+    
+    <!-- 오른쪽 첫번째 막대 (짧음) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,10 L20,10 L20,14 L18,14 Z"/>
+</vector>
+

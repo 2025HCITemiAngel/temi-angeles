@@ -136,6 +136,18 @@
             android:textColor="#111111"
             android:textColorHint="#9AA7B1"/>
 
+        <!-- 음성 대화 버튼 (주황색 동그라미) -->
+        <ImageButton
+            android:id="@+id/btn_voice_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_voice_chat"
+            android:src="@drawable/ic_voice_chat"
+            android:contentDescription="음성 대화"
+            android:padding="12dp"
+            android:scaleType="fitCenter"/>
+
         <!-- 마이크 버튼 (동그라미) -->
         <ImageButton
             android:id="@+id/btn_mic"

@@ -101,6 +101,13 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
+        <!-- ✅ 실시간 음성 대화 Activity 등록 -->
+        <activity
+            android:name=".RealtimeVoiceChatActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <!-- ✅ QR 안내 Activity 등록 -->
         <activity
             android:name=".EventQRActivity"

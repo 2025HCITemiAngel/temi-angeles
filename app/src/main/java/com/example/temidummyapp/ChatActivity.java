@@ -41,6 +41,7 @@ public class ChatActivity extends BaseActivity {
     private SpeechToTextService sttService; // 배치 방식
     private RealtimeSTTService realtimeSTTService; // 실시간 방식
     private ImageButton btnMic;
+    private ImageButton btnVoiceChat; // 음성 대화 버튼
     private View listeningOverlay;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO_STT = 1002;
 
@@ -194,6 +195,7 @@ public class ChatActivity extends BaseActivity {
     private void setupInputAndSendButton() {
         inputMessage = findViewById(R.id.input_message);
         btnSend = findViewById(R.id.btn_send);
+        btnVoiceChat = findViewById(R.id.btn_voice_chat);
         btnMic = findViewById(R.id.btn_mic);
         listeningOverlay = findViewById(R.id.listening_overlay);
 
@@ -204,6 +206,9 @@ public class ChatActivity extends BaseActivity {
             sendUserMessage();
             return true;
         });
+
+        // 음성 대화 버튼 클릭 - 실시간 양방향 대화 시작
+        btnVoiceChat.setOnClickListener(v -> startVoiceChat());
 
         // 마이크 버튼 클릭 - 녹음 시작
         btnMic.setOnClickListener(v -> startListening());
@@ -757,6 +762,33 @@ public class ChatActivity extends BaseActivity {
         super.onPause();
         // 앱이 백그라운드로 갈 때 자동 저장
         saveChatHistory();
+    }
+
+    /**
+     * 실시간 음성 대화 시작
+     */
+    private void startVoiceChat() {
+        // 녹음 권한 확인
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] { android.Manifest.permission.RECORD_AUDIO },
+                        PERMISSION_REQUEST_RECORD_AUDIO_STT);
+                return;
+            }
+        }
+
+        // 메시지 수신 중이면 무시
+        if (isWaitingForResponse) {
+            Toast.makeText(this, "메시지를 받는 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 채팅 기록 저장
+        saveChatHistory();
+
+        // 실시간 음성 대화 Activity 시작
+        android.content.Intent intent = new android.content.Intent(this, RealtimeVoiceChatActivity.class);
+        startActivity(intent);
     }
 
     @Override
